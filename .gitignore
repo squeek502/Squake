@@ -1,0 +1,41 @@
+# Builds & binaries
+build/
+bin/
+target/
+lib/
+launcher/
+.gradle/
+*.zip
+*.jar
+*.gradle
+
+# Misc mod files
+media/
+libs/
+
+# Tmp files
+*~
+*#
+
+# IDEs
+.classpath
+.project
+.settings
+.pydevproject
+
+# MCP Files
+docs/
+conf/
+eclipse/
+jars/
+logs/
+runtime/
+temp/
+reobf/
+CHANGELOG
+LICENSE.txt
+*.bat
+*.sh
+
+# Misc
+*.rej

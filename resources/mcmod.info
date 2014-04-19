@@ -1,0 +1,16 @@
+[
+{
+  "modid": "QuakeMovement",
+  "name": "Quake Movement",
+  "description": "A quake movement.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["squeek"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
