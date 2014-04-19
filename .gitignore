@@ -7,7 +7,6 @@ launcher/
 .gradle/
 *.zip
 *.jar
-*.gradle
 
 # Misc mod files
 media/

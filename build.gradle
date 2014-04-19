@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+minecraft {
+	version = "1.6.4-9.11.1.964"
+}
+
+group = project.projectDir.name.toLowerCase()
+archivesBaseName = project.projectDir.name + "-mc" + project.minecraft.version
+
+sourceSets.main{
+    java {
+		srcDirs 'java' //set the source folder as the /src subfolder
+	}
+    resources {
+		srcDirs 'resources' //set the resources folder as the /resources subfolder
+	}
+}
+
+dependencies {
+	compile fileTree(dir: 'libs', include: '*.jar,*.zip')
+}
+
+// variable replacement in source files
+task processSources(type:Copy){
+	from(sourceSets.main.java.srcDirs)
+	into project.buildDir.getPath()+"/sources/java"
+	expand 'version':project.version, 'mcversion':project.minecraft.version
+}
+
+// delete mcmod.info so that it gets a fresh version copied in every time
+task cleanModInfo(type: Delete) {
+	delete file(sourceSets.main.output.resourcesDir.getPath()+"/mcmod.info")
+}
+
+// correct task ordering
+processResources.dependsOn cleanModInfo
+compileJava.dependsOn processSources
+afterEvaluate { project ->
+	processSources.shouldRunAfter(sourceMainJava)
+}
+
+processResources
+{
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
