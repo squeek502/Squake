@@ -1,4 +1,4 @@
-package squeek.mods.quakemovement;
+package squeek.quakemovement;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -6,7 +6,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import api.player.client.ClientPlayerAPI;
 import api.player.client.ClientPlayerBase;
-
 import java.lang.reflect.Method;
 import cpw.mods.fml.common.Loader;
 
@@ -524,7 +523,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
         */
     }
     
-    private void quake_WaterAccelerate( float wishspeed, float speed, double wishX, double wishZ, double accel )
+    @SuppressWarnings("unused")
+	private void quake_WaterAccelerate( float wishspeed, float speed, double wishX, double wishZ, double accel )
     {
 		float addspeed = wishspeed - speed;
 		if (addspeed > 0)
@@ -578,7 +578,6 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     
     private void quake_Accelerate( float wishspeed, double wishX, double wishZ, double accel )
     {
-    	int i;
     	double addspeed, accelspeed, currentspeed;
 
     	// Determine veer amount
@@ -606,7 +605,6 @@ public class QuakeClientPlayer extends ClientPlayerBase {
 
     private void quake_AirAccelerate( float wishspeed, double wishX, double wishZ, double accel )
     {
-    	int i;
     	double addspeed, accelspeed, currentspeed;
 
     	float wishspd = wishspeed;
@@ -638,7 +636,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     	this.player.motionZ += accelspeed * wishZ;
     }
     
-    private void quake_Friction()
+    @SuppressWarnings("unused")
+	private void quake_Friction()
     {
         double       speed, newspeed, control;
         float        friction;
@@ -733,7 +732,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
         }
     }
     
-    private void quake_OnLivingUpdate()
+    @SuppressWarnings("unused")
+	private void quake_OnLivingUpdate()
     {
     	this.didJumpThisTick = false;
     }

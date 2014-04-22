@@ -1,18 +1,15 @@
-package squeek.mods.quakemovement;
+package squeek.quakemovement;
 
 import api.player.client.ClientPlayerAPI;
 import api.player.server.ServerPlayerAPI;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid="squeek_QuakeMovement", name="Quake Movement", version="0.1.0", dependencies="required-after:PlayerAPI")
 @NetworkMod(clientSideRequired=true)

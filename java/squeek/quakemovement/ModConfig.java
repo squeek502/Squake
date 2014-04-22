@@ -1,4 +1,4 @@
-package squeek.mods.quakemovement;
+package squeek.quakemovement;
 
 import java.io.File;
 

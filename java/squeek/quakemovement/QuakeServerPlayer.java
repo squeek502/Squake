@@ -1,4 +1,4 @@
-package squeek.mods.quakemovement;
+package squeek.quakemovement;
 
 import api.player.server.ServerPlayerAPI;
 import api.player.server.ServerPlayerBase;
