@@ -22,7 +22,7 @@ archivesBaseName = project.projectDir.name + "-mc" + project.minecraft.version
 
 sourceSets.main{
     java {
-		srcDirs 'java' //set the source folder as the /src subfolder
+		srcDirs 'java', 'apis' //set the source folder as the /src subfolder
 	}
     resources {
 		srcDirs 'resources' //set the resources folder as the /resources subfolder
@@ -35,9 +35,13 @@ dependencies {
 
 // variable replacement in source files
 task processSources(type:Copy){
-	from(sourceSets.main.java.srcDirs)
+	from('java')
+	{
+		include '**/ModInfo.java'
+
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
 	into project.buildDir.getPath()+"/sources/java"
-	expand 'version':project.version, 'mcversion':project.minecraft.version
 }
 
 // delete mcmod.info so that it gets a fresh version copied in every time
