@@ -7,12 +7,16 @@ import net.minecraft.util.MathHelper;
 import api.player.client.ClientPlayerAPI;
 import api.player.client.ClientPlayerBase;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import cpw.mods.fml.common.Loader;
 
 public class QuakeClientPlayer extends ClientPlayerBase {
 	
     // added member variables
     public boolean didJumpThisTick = false;
+    
+    List<float[]> baseVelocities = new ArrayList<float[]>();
     
     // the stuff
     public QuakeClientPlayer(ClientPlayerAPI playerapi)
@@ -47,6 +51,11 @@ public class QuakeClientPlayer extends ClientPlayerBase {
 		    	e.printStackTrace();
 		    }
     	}
+
+    	if (!baseVelocities.isEmpty())
+    	{
+	    	baseVelocities.clear();
+    	}
     	
     	super.beforeOnLivingUpdate();
     }
@@ -65,6 +74,21 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     	}
     	
     	super.onLivingUpdate();
+    }
+    
+    public void moveFlying(float sidemove, float forwardmove, float wishspeed)
+    {
+        if ((this.player.capabilities.isFlying && this.player.ridingEntity == null) || this.player.isInWater())
+        {
+        	super.moveFlying(sidemove, forwardmove, wishspeed);
+        	return;
+        }
+    	
+    	wishspeed *= 2.15f;
+    	float[] wishdir = getMovementDirection(sidemove, forwardmove);
+    	float[] wishvel = new float[] {wishdir[0]*wishspeed, wishdir[1]*wishspeed};
+    	baseVelocities.add(wishvel);
+    	
     }
     
     public void jump()
@@ -417,6 +441,17 @@ public class QuakeClientPlayer extends ClientPlayerBase {
 	        		
 	        		quake_Accelerate( wishspeed, wishdir[0], wishdir[1], sv_accelerate );
 	        	}
+	        	
+	        	if (!baseVelocities.isEmpty())
+	        	{
+	        		float speedMod = wishspeed / quake_getMaxMoveSpeed();
+			        // add in base velocities
+			        for (float[] baseVel : baseVelocities)
+			        {
+			        	this.player.motionX += baseVel[0] * speedMod;
+			        	this.player.motionZ += baseVel[1] * speedMod;
+			        }
+	        	}
             }
             // air movement
         	else
@@ -574,6 +609,17 @@ public class QuakeClientPlayer extends ClientPlayerBase {
         {
             this.player.motionY = 0.30000001192092896D;
         }
+
+    	if (!baseVelocities.isEmpty())
+    	{
+    		float speedMod = wishspeed / quake_getMaxMoveSpeed();
+	        // add in base velocities
+	        for (float[] baseVel : baseVelocities)
+	        {
+	        	this.player.motionX += baseVel[0] * speedMod;
+	        	this.player.motionZ += baseVel[1] * speedMod;
+	        }
+    	}
     }
     
     private void quake_Accelerate( float wishspeed, double wishX, double wishZ, double accel )
@@ -592,7 +638,7 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     		return;
 
     	// Determine acceleration speed after acceleration
-    	accelspeed = accel * wishspeed * 0.05F;
+    	accelspeed = accel * wishspeed / getSlipperiness() * 0.05F;
 
     	// Cap it
     	if (accelspeed > addspeed)
@@ -608,7 +654,7 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     	double addspeed, accelspeed, currentspeed;
 
     	float wishspd = wishspeed;
-    	float maxAirAcceleration = 0.03F;
+    	float maxAirAcceleration = 0.04F;
     	
     	if (wishspd > maxAirAcceleration)
     		wishspd = maxAirAcceleration;
