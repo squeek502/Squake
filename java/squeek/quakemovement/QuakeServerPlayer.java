@@ -14,7 +14,8 @@ public class QuakeServerPlayer extends ServerPlayerBase {
     	super(playerapi);
     }
     
-    public void fall( float fallDistance )
+    @Override
+	public void fall( float fallDistance )
     {
     	wasVelocityChangedBeforeFall = this.playerAPI.getVelocityChangedField() || this.player.velocityChanged;
 

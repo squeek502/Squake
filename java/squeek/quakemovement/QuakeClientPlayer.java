@@ -1,14 +1,13 @@
 package squeek.quakemovement;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import api.player.client.ClientPlayerAPI;
 import api.player.client.ClientPlayerBase;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import cpw.mods.fml.common.Loader;
 
 public class QuakeClientPlayer extends ClientPlayerBase {
@@ -24,7 +23,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     	super(playerapi);
     }
     
-    public void moveEntityWithHeading( float sidemove, float forwardmove )
+    @Override
+	public void moveEntityWithHeading( float sidemove, float forwardmove )
     {
         double d0 = this.player.posX;
         double d1 = this.player.posY;
@@ -38,7 +38,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
         this.player.addMovementStat(this.player.posX - d0, this.player.posY - d1, this.player.posZ - d2);
     }
     
-    public void beforeOnLivingUpdate()
+    @Override
+	public void beforeOnLivingUpdate()
     {
     	this.didJumpThisTick = false;
     	if (Loader.isModLoaded("squeek_Speedometer"))
@@ -60,7 +61,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     	super.beforeOnLivingUpdate();
     }
     
-    public void onLivingUpdate()
+    @Override
+	public void onLivingUpdate()
     {
     	if (Loader.isModLoaded("squeek_Speedometer"))
     	{
@@ -76,7 +78,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     	super.onLivingUpdate();
     }
     
-    public void moveFlying(float sidemove, float forwardmove, float wishspeed)
+    @Override
+	public void moveFlying(float sidemove, float forwardmove, float wishspeed)
     {
         if ((this.player.capabilities.isFlying && this.player.ridingEntity == null) || this.player.isInWater())
         {
@@ -91,7 +94,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     	
     }
     
-    public void jump()
+    @Override
+	public void jump()
     {
     	super.jump();
 
@@ -99,8 +103,8 @@ public class QuakeClientPlayer extends ClientPlayerBase {
         if (this.player.isSprinting())
         {
             float f = this.player.rotationYaw * 0.017453292F;
-            this.player.motionX += (double)(MathHelper.sin(f) * 0.2F);
-            this.player.motionZ -= (double)(MathHelper.cos(f) * 0.2F);
+            this.player.motionX += MathHelper.sin(f) * 0.2F;
+            this.player.motionZ -= MathHelper.cos(f) * 0.2F;
         }
     	
     	quake_Jump();
@@ -212,7 +216,7 @@ public class QuakeClientPlayer extends ClientPlayerBase {
     {
 		// taken from sprint
         int j = MathHelper.floor_double(this.player.posX);
-        int i = MathHelper.floor_double(this.player.posY - 0.20000000298023224D - (double)this.player.yOffset);
+        int i = MathHelper.floor_double(this.player.posY - 0.20000000298023224D - this.player.yOffset);
         int k = MathHelper.floor_double(this.player.posZ);
         int l = this.player.worldObj.getBlockId(j, i, k);
 
@@ -220,7 +224,7 @@ public class QuakeClientPlayer extends ClientPlayerBase {
         {
         	for( int iParticle=0; iParticle < numParticles; iParticle++ )
         	{
-        		this.player.worldObj.spawnParticle("tilecrack_" + l + "_" + this.player.worldObj.getBlockMetadata(j, i, k), this.player.posX + ((double)this.playerAPI.getRandField().nextFloat() - 0.5D) * (double)this.player.width, this.player.boundingBox.minY + 0.1D, this.player.posZ + ((double)this.playerAPI.getRandField().nextFloat() - 0.5D) * (double)this.player.width, -this.player.motionX * 4.0D, 1.5D, -this.player.motionZ * 4.0D);
+        		this.player.worldObj.spawnParticle("tilecrack_" + l + "_" + this.player.worldObj.getBlockMetadata(j, i, k), this.player.posX + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, this.player.boundingBox.minY + 0.1D, this.player.posZ + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, -this.player.motionX * 4.0D, 1.5D, -this.player.motionZ * 4.0D);
         	}
         }
     }
@@ -275,24 +279,24 @@ public class QuakeClientPlayer extends ClientPlayerBase {
         {
             float f5 = 0.15F;
 
-            if (this.player.motionX < (double)(-f5))
+            if (this.player.motionX < (-f5))
             {
-                this.player.motionX = (double)(-f5);
+                this.player.motionX = (-f5);
             }
 
-            if (this.player.motionX > (double)f5)
+            if (this.player.motionX > f5)
             {
-                this.player.motionX = (double)f5;
+                this.player.motionX = f5;
             }
 
-            if (this.player.motionZ < (double)(-f5))
+            if (this.player.motionZ < (-f5))
             {
-                this.player.motionZ = (double)(-f5);
+                this.player.motionZ = (-f5);
             }
 
-            if (this.player.motionZ > (double)f5)
+            if (this.player.motionZ > f5)
             {
-                this.player.motionZ = (double)f5;
+                this.player.motionZ = f5;
             }
 
             this.player.fallDistance = 0.0F;
@@ -302,7 +306,7 @@ public class QuakeClientPlayer extends ClientPlayerBase {
                 this.player.motionY = -0.15D;
             }
 
-            boolean flag = this.player.isSneaking() && this.player instanceof EntityPlayer;
+            boolean flag = this.player.isSneaking();
 
             if (flag && this.player.motionY < 0.0D)
             {
