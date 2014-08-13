@@ -16,7 +16,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 
 	List<float[]> baseVelocities = new ArrayList<float[]>();
 
-	private static Class<?> guiSpeedometer = null;
+	private static Class<?> hudSpeedometer = null;
 	private static Method setDidJumpThisTick = null;
 	private static Method setIsJumping = null;
 	static
@@ -25,9 +25,9 @@ public class QuakeClientPlayer extends ClientPlayerBase
 		{
 			if (Loader.isModLoaded("Squeedometer"))
 			{
-				guiSpeedometer = Class.forName("squeek.speedometer.GuiSpeedometer");
-				setDidJumpThisTick = guiSpeedometer.getDeclaredMethod("setDidJumpThisTick", new Class<?>[]{boolean.class});
-				setIsJumping = guiSpeedometer.getDeclaredMethod("setIsJumping", new Class<?>[]{boolean.class});
+				hudSpeedometer = Class.forName("squeek.speedometer.HudSpeedometer");
+				setDidJumpThisTick = hudSpeedometer.getDeclaredMethod("setDidJumpThisTick", new Class<?>[]{boolean.class});
+				setIsJumping = hudSpeedometer.getDeclaredMethod("setIsJumping", new Class<?>[]{boolean.class});
 			}
 		}
 		catch (Exception e)

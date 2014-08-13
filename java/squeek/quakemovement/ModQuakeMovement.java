@@ -10,7 +10,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, dependencies = "required-after:PlayerAPI")
+@Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, dependencies = "required-after:PlayerAPI;after:Squeedometer")
 @NetworkMod(clientSideRequired = true)
 public class ModQuakeMovement
 {

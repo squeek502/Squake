@@ -1,13 +1,13 @@
 [
 {
-  "modid": "QuakeMovement",
-  "name": "Quake Movement",
-  "description": "A quake movement.",
+  "modid": "Squake",
+  "name": "Squake",
+  "description": "Quake-style movement in Minecraft.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authors": ["squeek"],
+  "authorList": ["squeek"],
   "credits": "",
   "logoFile": "",
   "screenshots": [],
