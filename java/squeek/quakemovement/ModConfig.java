@@ -66,8 +66,8 @@ public class ModConfig
 		UNCAPPED_BUNNYHOP_ENABLED = config.get(CATEGORY_MOVEMENT, UNCAPPED_BUNNYHOP_ENABLED_NAME, UNCAPPED_BUNNYHOP_ENABLED_DEFAULT, "if enabled, the soft and hard caps will not be applied at all").getBoolean(UNCAPPED_BUNNYHOP_ENABLED_DEFAULT);
 		AIR_ACCELERATE = config.get(CATEGORY_MOVEMENT, AIR_ACCELERATE_NAME, AIR_ACCELERATE_DEFAULT, "a higher value means you can turn more sharply in the air without losing speed").getDouble(AIR_ACCELERATE_DEFAULT);
 		ACCELERATE = config.get(CATEGORY_MOVEMENT, ACCELERATE_NAME, ACCELERATE_DEFAULT, "a higher value means you accelerate faster on the ground").getDouble(ACCELERATE_DEFAULT);
-		HARD_CAP = (float) (config.get(CATEGORY_MOVEMENT, HARD_CAP_NAME, HARD_CAP_DEFAULT, "if you ever jump while above the hard cap speed (moveSpeed*hardCapThreshold), your speed is set to the hard cap speed").getDouble(HARD_CAP_DEFAULT));
-		SOFT_CAP = (float) (config.get(CATEGORY_MOVEMENT, SOFT_CAP_NAME, SOFT_CAP_DEFAULT, "soft cap speed = (moveSpeed*hardCapThreshold); see " + SOFT_CAP_DEGEN_NAME).getDouble(SOFT_CAP_DEFAULT));
+		HARD_CAP = (float) (config.get(CATEGORY_MOVEMENT, HARD_CAP_NAME, HARD_CAP_DEFAULT, "see " + UNCAPPED_BUNNYHOP_ENABLED_NAME + "; if you ever jump while above the hard cap speed (moveSpeed*hardCapThreshold), your speed is set to the hard cap speed").getDouble(HARD_CAP_DEFAULT));
+		SOFT_CAP = (float) (config.get(CATEGORY_MOVEMENT, SOFT_CAP_NAME, SOFT_CAP_DEFAULT, "see " + UNCAPPED_BUNNYHOP_ENABLED_NAME + " and " + SOFT_CAP_DEGEN_NAME + "; soft cap speed = (moveSpeed*softCapThreshold)").getDouble(SOFT_CAP_DEFAULT));
 		SOFT_CAP_DEGEN = (float) (config.get(CATEGORY_MOVEMENT, SOFT_CAP_DEGEN_NAME, SOFT_CAP_DEGEN_DEFAULT, "the modifier used to calculate speed lost when jumping above the soft cap").getDouble(SOFT_CAP_DEGEN_DEFAULT));
 
 		SHARKING_ENABLED = config.get(CATEGORY_MOVEMENT, SHARKING_ENABLED_NAME, SHARKING_ENABLED_DEFAULT, "if enabled, holding jump while swimming at the surface of water allows you to glide").getBoolean(SHARKING_ENABLED_DEFAULT);
