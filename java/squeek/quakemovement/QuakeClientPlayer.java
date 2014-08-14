@@ -675,7 +675,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 		double addspeed, accelspeed, currentspeed;
 
 		float wishspd = wishspeed;
-		float maxAirAcceleration = 0.04F;
+		float maxAirAcceleration = (float) ModConfig.MAX_AIR_ACCEL_PER_TICK;
 
 		if (wishspd > maxAirAcceleration)
 			wishspd = maxAirAcceleration;

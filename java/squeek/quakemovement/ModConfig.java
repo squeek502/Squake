@@ -55,6 +55,10 @@ public class ModConfig
 	private static final String INCREASED_FALL_DISTANCE_NAME = "fallDistanceThresholdIncrease";
 	private static final double INCREASED_FALL_DISTANCE_DEFAULT = 0.0D;
 
+	public static double MAX_AIR_ACCEL_PER_TICK;
+	private static final String MAX_AIR_ACCEL_PER_TICK_NAME = "maxAirAccelerationPerTick";
+	private static final double MAX_AIR_ACCEL_PER_TICK_DEFAULT = 0.045D;
+
 	private static Configuration config;
 
 	public static void init(File file)
@@ -65,6 +69,7 @@ public class ModConfig
 
 		UNCAPPED_BUNNYHOP_ENABLED = config.get(CATEGORY_MOVEMENT, UNCAPPED_BUNNYHOP_ENABLED_NAME, UNCAPPED_BUNNYHOP_ENABLED_DEFAULT, "if enabled, the soft and hard caps will not be applied at all").getBoolean(UNCAPPED_BUNNYHOP_ENABLED_DEFAULT);
 		AIR_ACCELERATE = config.get(CATEGORY_MOVEMENT, AIR_ACCELERATE_NAME, AIR_ACCELERATE_DEFAULT, "a higher value means you can turn more sharply in the air without losing speed").getDouble(AIR_ACCELERATE_DEFAULT);
+		MAX_AIR_ACCEL_PER_TICK = config.get(CATEGORY_MOVEMENT, MAX_AIR_ACCEL_PER_TICK_NAME, MAX_AIR_ACCEL_PER_TICK_DEFAULT, "a higher value means faster air acceleration").getDouble(MAX_AIR_ACCEL_PER_TICK_DEFAULT);
 		ACCELERATE = config.get(CATEGORY_MOVEMENT, ACCELERATE_NAME, ACCELERATE_DEFAULT, "a higher value means you accelerate faster on the ground").getDouble(ACCELERATE_DEFAULT);
 		HARD_CAP = (float) (config.get(CATEGORY_MOVEMENT, HARD_CAP_NAME, HARD_CAP_DEFAULT, "see " + UNCAPPED_BUNNYHOP_ENABLED_NAME + "; if you ever jump while above the hard cap speed (moveSpeed*hardCapThreshold), your speed is set to the hard cap speed").getDouble(HARD_CAP_DEFAULT));
 		SOFT_CAP = (float) (config.get(CATEGORY_MOVEMENT, SOFT_CAP_NAME, SOFT_CAP_DEFAULT, "see " + UNCAPPED_BUNNYHOP_ENABLED_NAME + " and " + SOFT_CAP_DEGEN_NAME + "; soft cap speed = (moveSpeed*softCapThreshold)").getDouble(SOFT_CAP_DEFAULT));
