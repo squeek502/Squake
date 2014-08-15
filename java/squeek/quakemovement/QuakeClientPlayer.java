@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import api.player.client.ClientPlayerAPI;
@@ -156,12 +157,9 @@ public class QuakeClientPlayer extends ClientPlayerBase
 
 		if (this.player.onGround)
 		{
-			int j = this.player.worldObj.getBlockId(MathHelper.floor_double(this.player.posX), MathHelper.floor_double(this.player.boundingBox.minY) - 1, MathHelper.floor_double(this.player.posZ));
+			Block ground = this.player.worldObj.getBlock(MathHelper.floor_double(this.player.posX), MathHelper.floor_double(this.player.boundingBox.minY) - 1, MathHelper.floor_double(this.player.posZ));
 
-			if (j > 0)
-			{
-				f2 = 1.0F - Block.blocksList[j].slipperiness;
-			}
+			f2 = 1.0F - ground.slipperiness;
 		}
 
 		return f2;
@@ -173,12 +171,10 @@ public class QuakeClientPlayer extends ClientPlayerBase
 		if (this.player.onGround)
 		{
 			f2 = 0.54600006F;
-			int j = this.player.worldObj.getBlockId(MathHelper.floor_double(this.player.posX), MathHelper.floor_double(this.player.boundingBox.minY) - 1, MathHelper.floor_double(this.player.posZ));
+			Block ground = this.player.worldObj.getBlock(MathHelper.floor_double(this.player.posX), MathHelper.floor_double(this.player.boundingBox.minY) - 1, MathHelper.floor_double(this.player.posZ));
 
-			if (j > 0)
-			{
-				f2 = Block.blocksList[j].slipperiness * 0.91F;
-			}
+			if (ground != null)
+				f2 = ground.slipperiness * 0.91F;
 		}
 		return f2;
 	}
@@ -236,13 +232,13 @@ public class QuakeClientPlayer extends ClientPlayerBase
 		int j = MathHelper.floor_double(this.player.posX);
 		int i = MathHelper.floor_double(this.player.posY - 0.20000000298023224D - this.player.yOffset);
 		int k = MathHelper.floor_double(this.player.posZ);
-		int l = this.player.worldObj.getBlockId(j, i, k);
+		Block ground = this.player.worldObj.getBlock(j, i, k);
 
-		if (l > 0)
+		if (ground != null && ground.getMaterial() != Material.air)
 		{
 			for (int iParticle = 0; iParticle < numParticles; iParticle++)
 			{
-				this.player.worldObj.spawnParticle("tilecrack_" + l + "_" + this.player.worldObj.getBlockMetadata(j, i, k), this.player.posX + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, this.player.boundingBox.minY + 0.1D, this.player.posZ + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, -this.player.motionX * 4.0D, 1.5D, -this.player.motionZ * 4.0D);
+				this.player.worldObj.spawnParticle("blockcrack_" + Block.getIdFromBlock(ground) + "_" + this.player.worldObj.getBlockMetadata(j, i, k), this.player.posX + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, this.player.boundingBox.minY + 0.1D, this.player.posZ + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, -this.player.motionX * 4.0D, 1.5D, -this.player.motionZ * 4.0D);
 			}
 		}
 	}

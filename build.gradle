@@ -5,16 +5,20 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
 
 apply plugin: 'forge'
 
 minecraft {
-	version = "1.6.4-9.11.1.964"
+	version = "1.7.2-10.12.1.1060"
 }
 
 group = project.projectDir.name.toLowerCase()
@@ -34,7 +38,7 @@ dependencies {
 }
 
 // variable replacement in source files
-task processSources(type:Copy){
+task processSourcesCustom(type:Copy){
 	from('java')
 	{
 		include '**/ModInfo.java'
@@ -51,9 +55,9 @@ task cleanModInfo(type: Delete) {
 
 // correct task ordering
 processResources.dependsOn cleanModInfo
-compileJava.dependsOn processSources
+compileJava.dependsOn processSourcesCustom
 afterEvaluate { project ->
-	processSources.shouldRunAfter(sourceMainJava)
+	processSourcesCustom.shouldRunAfter(sourceMainJava)
 }
 
 processResources

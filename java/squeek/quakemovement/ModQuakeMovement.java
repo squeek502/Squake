@@ -5,13 +5,12 @@ import api.player.server.ServerPlayerAPI;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, dependencies = "required-after:PlayerAPI;after:Squeedometer")
-@NetworkMod(clientSideRequired = true)
 public class ModQuakeMovement
 {
 	// The instance of your mod that Forge uses.
@@ -31,5 +30,7 @@ public class ModQuakeMovement
 
 		if (event.getSide() == Side.CLIENT)
 			ClientPlayerAPI.register(ModInfo.MODID, QuakeClientPlayer.class);
+
+		FMLInterModComms.sendRuntimeMessage(ModInfo.MODID, "VersionChecker", "addVersionCheck", "http://www.ryanliptak.com/minecraft/versionchecker/squeek502/Squake");
 	}
 }
