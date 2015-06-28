@@ -4,12 +4,14 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import api.player.client.ClientPlayerAPI;
 import api.player.client.ClientPlayerBase;
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 public class QuakeClientPlayer extends ClientPlayerBase
 {
@@ -157,8 +159,8 @@ public class QuakeClientPlayer extends ClientPlayerBase
 
 		if (this.player.onGround)
 		{
-			Block ground = this.player.worldObj.getBlock(MathHelper.floor_double(this.player.posX), MathHelper.floor_double(this.player.boundingBox.minY) - 1, MathHelper.floor_double(this.player.posZ));
-
+			BlockPos groundPos = new BlockPos(MathHelper.floor_double(this.player.posX), MathHelper.floor_double(this.player.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.player.posZ));
+			Block ground = this.player.worldObj.getBlockState(groundPos).getBlock();
 			f2 = 1.0F - ground.slipperiness;
 		}
 
@@ -171,7 +173,8 @@ public class QuakeClientPlayer extends ClientPlayerBase
 		if (this.player.onGround)
 		{
 			f2 = 0.54600006F;
-			Block ground = this.player.worldObj.getBlock(MathHelper.floor_double(this.player.posX), MathHelper.floor_double(this.player.boundingBox.minY) - 1, MathHelper.floor_double(this.player.posZ));
+			BlockPos groundPos = new BlockPos(MathHelper.floor_double(this.player.posX), MathHelper.floor_double(this.player.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.player.posZ));
+			Block ground = this.player.worldObj.getBlockState(groundPos).getBlock();
 
 			if (ground != null)
 				f2 = ground.slipperiness * 0.91F;
@@ -230,15 +233,16 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	{
 		// taken from sprint
 		int j = MathHelper.floor_double(this.player.posX);
-		int i = MathHelper.floor_double(this.player.posY - 0.20000000298023224D - this.player.yOffset);
+		int i = MathHelper.floor_double(this.player.posY - 0.20000000298023224D - this.player.getYOffset());
 		int k = MathHelper.floor_double(this.player.posZ);
-		Block ground = this.player.worldObj.getBlock(j, i, k);
+		IBlockState blockState = this.player.worldObj.getBlockState(new BlockPos(j, i, k));
+		Block ground = blockState.getBlock();
 
-		if (ground != null && ground.getMaterial() != Material.air)
+		if (ground != null && ground.getRenderType() != -1)
 		{
 			for (int iParticle = 0; iParticle < numParticles; iParticle++)
 			{
-				this.player.worldObj.spawnParticle("blockcrack_" + Block.getIdFromBlock(ground) + "_" + this.player.worldObj.getBlockMetadata(j, i, k), this.player.posX + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, this.player.boundingBox.minY + 0.1D, this.player.posZ + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, -this.player.motionX * 4.0D, 1.5D, -this.player.motionZ * 4.0D);
+				this.player.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.player.posX + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, this.player.getEntityBoundingBox().minY + 0.1D, this.player.posZ + (this.playerAPI.getRandField().nextFloat() - 0.5D) * this.player.width, -this.player.motionX * 4.0D, 1.5D, -this.player.motionZ * 4.0D, new int[] {Block.getStateId(blockState)});
 			}
 		}
 	}
@@ -260,7 +264,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 
 	private void minecraft_ApplyGravity()
 	{
-		if (this.player.worldObj.isRemote && (!this.player.worldObj.blockExists((int) this.player.posX, 0, (int) this.player.posZ) || !this.player.worldObj.getChunkFromBlockCoords((int) this.player.posX, (int) this.player.posZ).isChunkLoaded))
+		if (this.player.worldObj.isRemote && (!this.player.worldObj.isBlockLoaded(new BlockPos((int)this.player.posX, 0, (int)this.player.posZ)) || !this.player.worldObj.getChunkFromBlockCoords(new BlockPos((int) this.player.posX, (int) this.player.posY, (int) this.player.posZ)).isLoaded()))
 		{
 			if (this.player.posY > 0.0D)
 			{
@@ -373,7 +377,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	{
 		// take care of water and lava movement using default code
 		if ((this.player.isInWater() && !this.player.capabilities.isFlying)
-				|| (this.player.handleLavaMovement() && !this.player.capabilities.isFlying))
+				|| (this.player.isInLava() && !this.player.capabilities.isFlying))
 		{
 			super.moveEntityWithHeading(sidemove, forwardmove);
 		}
@@ -419,7 +423,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	public void quake_moveEntityWithHeading(float sidemove, float forwardmove)
 	{
 		// take care of lava movement using default code
-		if ((this.player.handleLavaMovement() && !this.player.capabilities.isFlying))
+		if ((this.player.isInLava() && !this.player.capabilities.isFlying))
 		{
 			super.moveEntityWithHeading(sidemove, forwardmove);
 			return;
@@ -478,7 +482,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 
 				if (ModConfig.SHARKING_ENABLED && ModConfig.SHARKING_SURFACE_TENSION > 0.0D && this.playerAPI.getIsJumpingField() && this.player.motionY < 0.0F)
 				{
-					AxisAlignedBB axisalignedbb = this.player.boundingBox.getOffsetBoundingBox(this.player.motionX, this.player.motionY, this.player.motionZ);
+					AxisAlignedBB axisalignedbb = this.player.getEntityBoundingBox().offset(this.player.motionX, this.player.motionY, this.player.motionZ);
 					boolean isFallingIntoWater = this.player.worldObj.isAnyLiquid(axisalignedbb);
 
 					if (isFallingIntoWater)

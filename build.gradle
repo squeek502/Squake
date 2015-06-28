@@ -1,77 +1,64 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
+	repositories {
+		mavenCentral()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+	}
 }
 
 apply plugin: 'forge'
 
 minecraft {
-	version = "1.7.2-10.12.1.1060"
+	version = "1.8-11.14.1.1334"
+	mappings = "snapshot_20141130"
 }
 
 group = project.projectDir.name.toLowerCase()
 archivesBaseName = project.projectDir.name + "-mc" + project.minecraft.version
 
 sourceSets.main{
-    java {
-		srcDirs 'java', 'apis' //set the source folder as the /src subfolder
+	java {
+		srcDirs 'java', 'apis'
 	}
-    resources {
-		srcDirs 'resources' //set the resources folder as the /resources subfolder
+	resources {
+		srcDirs 'resources'
 	}
 }
 
-dependencies {
-	compile fileTree(dir: 'libs', include: '*.jar,*.zip')
-}
-
-// variable replacement in source files
-task processSourcesCustom(type:Copy){
+// variable substitution in java files
+task processSourceMainJava(type:Copy) {
+	inputs.property "vars", project.version + project.minecraft.version
 	from('java')
 	{
 		include '**/ModInfo.java'
-
+		include '**/package-info.java'
 		expand 'version':project.version, 'mcversion':project.minecraft.version
 	}
 	into project.buildDir.getPath()+"/sources/java"
 }
 
-// delete mcmod.info so that it gets a fresh version copied in every time
-task cleanModInfo(type: Delete) {
-	delete file(sourceSets.main.output.resourcesDir.getPath()+"/mcmod.info")
-}
-
 // correct task ordering
-processResources.dependsOn cleanModInfo
-compileJava.dependsOn processSourcesCustom
 afterEvaluate { project ->
-	processSourcesCustom.shouldRunAfter(sourceMainJava)
+	sourceMainJava.finalizedBy(processSourceMainJava)
 }
 
 processResources
 {
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+	inputs.property "vars", project.version + project.minecraft.version
+	from(sourceSets.main.resources.srcDirs) {
+		include '**/*.info'
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
+	from(sourceSets.main.resources.srcDirs) {
+		exclude '**/*.info'
+	}
 }
