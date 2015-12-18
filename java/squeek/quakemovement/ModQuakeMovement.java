@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, dependencies = "required-after:PlayerAPI;after:Squeedometer")
+@Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, acceptedMinecraftVersions="[1.8,1.9)", dependencies = "required-after:PlayerAPI;after:Squeedometer")
 public class ModQuakeMovement
 {
 	// The instance of your mod that Forge uses.
