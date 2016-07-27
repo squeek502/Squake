@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import api.player.client.ClientPlayerAPI;
 import api.player.client.ClientPlayerBase;
 import net.minecraftforge.fml.common.Loader;
@@ -51,7 +52,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 		double d1 = this.player.posY;
 		double d2 = this.player.posZ;
 
-		if (this.player.capabilities.isFlying && this.player.ridingEntity == null)
+		if (this.player.capabilities.isFlying && this.player.getRidingEntity() == null)
 			super.moveEntityWithHeading(sidemove, forwardmove);
 		else
 			this.quake_moveEntityWithHeading(sidemove, forwardmove);
@@ -102,7 +103,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	@Override
 	public void moveFlying(float sidemove, float forwardmove, float wishspeed)
 	{
-		if ((this.player.capabilities.isFlying && this.player.ridingEntity == null) || this.player.isInWater())
+		if ((this.player.capabilities.isFlying && this.player.getRidingEntity() == null) || this.player.isInWater())
 		{
 			super.moveFlying(sidemove, forwardmove, wishspeed);
 			return;
@@ -236,9 +237,8 @@ public class QuakeClientPlayer extends ClientPlayerBase
 		int i = MathHelper.floor_double(this.player.posY - 0.20000000298023224D - this.player.getYOffset());
 		int k = MathHelper.floor_double(this.player.posZ);
 		IBlockState blockState = this.player.worldObj.getBlockState(new BlockPos(j, i, k));
-		Block ground = blockState.getBlock();
 
-		if (ground != null && ground.getRenderType() != -1)
+		if (blockState.getRenderType() != EnumBlockRenderType.INVISIBLE)
 		{
 			for (int iParticle = 0; iParticle < numParticles; iParticle++)
 			{
@@ -360,7 +360,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	private void minecraft_WaterMove(float sidemove, float forwardmove)
 	{
 		double d0 = this.player.posY;
-		this.player.moveFlying(sidemove, forwardmove, 0.04F);
+		this.player.moveRelative(sidemove, forwardmove, 0.04F);
 		this.player.moveEntity(this.player.motionX, this.player.motionY, this.player.motionZ);
 		this.player.motionX *= 0.800000011920929D;
 		this.player.motionY *= 0.800000011920929D;
@@ -387,7 +387,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 			float momentumRetention = this.getSlipperiness();
 
 			// alter motionX/motionZ based on desired movement
-			this.player.moveFlying(sidemove, forwardmove, this.minecraft_getMoveSpeed());
+			this.player.moveRelative(sidemove, forwardmove, this.minecraft_getMoveSpeed());
 
 			// make adjustments for ladder interaction
 			minecraft_ApplyLadderPhysics();
@@ -483,7 +483,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 				if (ModConfig.SHARKING_ENABLED && ModConfig.SHARKING_SURFACE_TENSION > 0.0D && this.playerAPI.getIsJumpingField() && this.player.motionY < 0.0F)
 				{
 					AxisAlignedBB axisalignedbb = this.player.getEntityBoundingBox().offset(this.player.motionX, this.player.motionY, this.player.motionZ);
-					boolean isFallingIntoWater = this.player.worldObj.isAnyLiquid(axisalignedbb);
+					boolean isFallingIntoWater = this.player.worldObj.containsAnyLiquid(axisalignedbb);
 
 					if (isFallingIntoWater)
 						this.player.motionY *= ModConfig.SHARKING_SURFACE_TENSION;

@@ -1,64 +1,51 @@
 buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
-		}
-		maven {
-			name = "sonatype"
-			url = "https://oss.sonatype.org/content/repositories/snapshots/"
-		}
-	}
-	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-	}
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 minecraft {
-	version = "1.8-11.14.1.1334"
-	mappings = "snapshot_20141130"
+    version = "1.9.4-12.17.0.1962"
+    mappings = "snapshot_20160518"
+    runDir = "run"
+
+    replace "\${version}", project.version
+    replaceIn "ModInfo.java"
 }
 
 group = project.projectDir.name.toLowerCase()
 archivesBaseName = project.projectDir.name + "-mc" + project.minecraft.version
 
-sourceSets.main{
-	java {
-		srcDirs 'java', 'apis'
-	}
-	resources {
-		srcDirs 'resources'
-	}
+sourceSets.main.java.srcDirs += 'java'
+sourceSets.main.resources.srcDirs += 'resources'
+
+processResources {
+    inputs.property "vars", project.version + project.minecraft.version
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.info'
+    }
 }
 
-// variable substitution in java files
-task processSourceMainJava(type:Copy) {
-	inputs.property "vars", project.version + project.minecraft.version
-	from('java')
-	{
-		include '**/ModInfo.java'
-		include '**/package-info.java'
-		expand 'version':project.version, 'mcversion':project.minecraft.version
-	}
-	into project.buildDir.getPath()+"/sources/java"
+repositories {
+    ivy {
+        name "PlayerAPI"
+        artifactPattern "http://addons-origin.cursecdn.com/files/2318/180/[module]-[revision].[ext]"
+    }
 }
 
-// correct task ordering
-afterEvaluate { project ->
-	sourceMainJava.finalizedBy(processSourceMainJava)
-}
-
-processResources
-{
-	inputs.property "vars", project.version + project.minecraft.version
-	from(sourceSets.main.resources.srcDirs) {
-		include '**/*.info'
-		expand 'version':project.version, 'mcversion':project.minecraft.version
-	}
-	from(sourceSets.main.resources.srcDirs) {
-		exclude '**/*.info'
-	}
+dependencies {
+    deobfCompile group: 'playerapi', name: 'PlayerAPI', version: '1.9.4-1.0', ext: 'jar'
 }
