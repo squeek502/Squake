@@ -15,20 +15,6 @@ public class QuakeServerPlayer extends ServerPlayerBase
 	public QuakeServerPlayer(ServerPlayerAPI playerapi)
 	{
 		super(playerapi);
-
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-	@SubscribeEvent
-	public void onLivingFall(LivingFallEvent event)
-	{
-		if (!(event.entity instanceof EntityPlayer))
-			return;
-
-		if (ModConfig.INCREASED_FALL_DISTANCE != 0.0D)
-		{
-			event.distance = (float) (event.distance - ModConfig.INCREASED_FALL_DISTANCE);
-		}
 	}
 
 	@Override

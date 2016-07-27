@@ -9,6 +9,10 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, acceptedMinecraftVersions="[1.8,1.9)", dependencies = "required-after:PlayerAPI;after:Squeedometer")
 public class ModQuakeMovement
@@ -21,6 +25,7 @@ public class ModQuakeMovement
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		ModConfig.init(event.getSuggestedConfigurationFile());
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@EventHandler
@@ -32,5 +37,17 @@ public class ModQuakeMovement
 			ClientPlayerAPI.register(ModInfo.MODID, QuakeClientPlayer.class);
 
 		FMLInterModComms.sendRuntimeMessage(ModInfo.MODID, "VersionChecker", "addVersionCheck", "http://www.ryanliptak.com/minecraft/versionchecker/squeek502/Squake");
+	}
+
+	@SubscribeEvent
+	public void onLivingFall(LivingFallEvent event)
+	{
+		if (!(event.entity instanceof EntityPlayer))
+			return;
+
+		if (ModConfig.INCREASED_FALL_DISTANCE != 0.0D)
+		{
+			event.distance = (float) (event.distance - ModConfig.INCREASED_FALL_DISTANCE);
+		}
 	}
 }
