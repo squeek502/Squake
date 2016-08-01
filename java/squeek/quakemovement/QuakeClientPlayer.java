@@ -52,7 +52,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 		double d1 = this.player.posY;
 		double d2 = this.player.posZ;
 
-		if (this.player.capabilities.isFlying && this.player.getRidingEntity() == null)
+		if ((this.player.capabilities.isFlying || this.player.isElytraFlying()) && this.player.getRidingEntity() == null)
 			super.moveEntityWithHeading(sidemove, forwardmove);
 		else
 			this.quake_moveEntityWithHeading(sidemove, forwardmove);
