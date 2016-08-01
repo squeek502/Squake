@@ -14,7 +14,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 minecraft {
-    version = "1.9.4-12.17.0.1962"
+    version = "1.10.2-12.18.1.2044"
     mappings = "snapshot_20160518"
     runDir = "run"
 
@@ -42,10 +42,10 @@ processResources {
 repositories {
     ivy {
         name "PlayerAPI"
-        artifactPattern "http://addons-origin.cursecdn.com/files/2318/180/[module]-[revision].[ext]"
+        artifactPattern "http://addons.curse.cursecdn.com/files/2320/23/[module]-[revision].[ext]"
     }
 }
 
 dependencies {
-    deobfCompile group: 'playerapi', name: 'PlayerAPI', version: '1.9.4-1.0', ext: 'jar'
+    deobfCompile group: 'playerapi', name: 'PlayerAPI', version: '1.10.2-1.0', ext: 'jar'
 }
