@@ -1,32 +1,26 @@
 package squeek.quakemovement;
 
-import api.player.server.ServerPlayerAPI;
-import api.player.server.ServerPlayerBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class QuakeServerPlayer extends ServerPlayerBase
+public class QuakeServerPlayer
 {
+	// we can get away with a single static variable here instead of a <Player, boolean> map
+	// because we only care about the state before it has any possibility of changing
+	private static boolean wasVelocityChangedBeforeFall = false;
 
-	private boolean wasVelocityChangedBeforeFall = false;
-
-	public QuakeServerPlayer(ServerPlayerAPI playerapi)
+	public static void beforeFall(EntityPlayer player, float fallDistance, float damageMultiplier)
 	{
-		super(playerapi);
+		if (player.world.isRemote)
+			return;
+
+		wasVelocityChangedBeforeFall = player.velocityChanged;
 	}
 
-	@Override
-	public void beforeFall(float fallDistance, float damageMultiplier)
+	public static void afterFall(EntityPlayer player, float fallDistance, float damageMultiplier)
 	{
-		wasVelocityChangedBeforeFall = this.playerAPI.getVelocityChangedField() || this.player.velocityChanged;
-	}
+		if (player.world.isRemote)
+			return;
 
-	@Override
-	public void afterFall(float fallDistance, float damageMultiplier)
-	{
-		this.playerAPI.setVelocityChangedField(wasVelocityChangedBeforeFall);
-		this.player.velocityChanged = wasVelocityChangedBeforeFall;
+		player.velocityChanged = wasVelocityChangedBeforeFall;
 	}
 }

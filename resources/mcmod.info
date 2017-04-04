@@ -1,6 +1,6 @@
 [
 {
-  "modid": "Squake",
+  "modid": "squake",
   "name": "Squake",
   "description": "Quake-style movement in Minecraft.",
   "version": "${version}",
