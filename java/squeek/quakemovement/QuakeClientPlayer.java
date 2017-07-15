@@ -50,6 +50,7 @@ public class QuakeClientPlayer
 		if (!player.world.isRemote)
 			return false;
 
+		boolean didQuakeMovement;
 		double d0 = player.posX;
 		double d1 = player.posY;
 		double d2 = player.posZ;
@@ -57,10 +58,12 @@ public class QuakeClientPlayer
 		if ((player.capabilities.isFlying || player.isElytraFlying()) && player.getRidingEntity() == null)
 			return false;
 		else
-			quake_moveEntityWithHeading(player, sidemove, forwardmove);
+			didQuakeMovement = quake_moveEntityWithHeading(player, sidemove, forwardmove);
 
-		player.addMovementStat(player.posX - d0, player.posY - d1, player.posZ - d2);
-		return true;
+		if (didQuakeMovement)
+			player.addMovementStat(player.posX - d0, player.posY - d1, player.posZ - d2);
+
+		return didQuakeMovement;
 	}
 
 	public static void beforeOnLivingUpdate(EntityPlayer player)
