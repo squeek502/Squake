@@ -113,7 +113,7 @@ public class QuakeClientPlayer
 		if (!player.world.isRemote)
 			return false;
 
-		if ((player.capabilities.isFlying && player.getRidingEntity() == null) || player.isInWater())
+		if ((player.capabilities.isFlying && player.getRidingEntity() == null) || player.isInWater() || player.isInLava())
 		{
 			return false;
 		}
