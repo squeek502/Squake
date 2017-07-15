@@ -45,7 +45,7 @@ public class QuakeClientPlayer
 		}
 	}
 
-	public static boolean moveEntityWithHeading(EntityPlayer player, float sidemove, float forwardmove)
+	public static boolean moveEntityWithHeading(EntityPlayer player, float sidemove, float upmove, float forwardmove)
 	{
 		if (!player.world.isRemote)
 			return false;
@@ -58,7 +58,7 @@ public class QuakeClientPlayer
 		if ((player.capabilities.isFlying || player.isElytraFlying()) && player.getRidingEntity() == null)
 			return false;
 		else
-			didQuakeMovement = quake_moveEntityWithHeading(player, sidemove, forwardmove);
+			didQuakeMovement = quake_moveEntityWithHeading(player, sidemove, upmove, forwardmove);
 
 		if (didQuakeMovement)
 			player.addMovementStat(player.posX - d0, player.posY - d1, player.posZ - d2);
@@ -100,15 +100,15 @@ public class QuakeClientPlayer
 		}
 	}
 
-	public static boolean moveRelativeBase(Entity entity, float sidemove, float forwardmove, float friction)
+	public static boolean moveRelativeBase(Entity entity, float sidemove, float upmove, float forwardmove, float friction)
 	{
 		if (!(entity instanceof EntityPlayer))
 			return false;
 
-		return moveRelative((EntityPlayer)entity, sidemove, forwardmove, friction);
+		return moveRelative((EntityPlayer)entity, sidemove, forwardmove, upmove, friction);
 	}
 
-	public static boolean moveRelative(EntityPlayer player, float sidemove, float forwardmove, float friction)
+	public static boolean moveRelative(EntityPlayer player, float sidemove, float upmove, float forwardmove, float friction)
 	{
 		if (!player.world.isRemote)
 			return false;
@@ -377,10 +377,10 @@ public class QuakeClientPlayer
 		player.limbSwing += player.limbSwingAmount;
 	}
 
-	private static void minecraft_WaterMove(EntityPlayer player, float sidemove, float forwardmove)
+	private static void minecraft_WaterMove(EntityPlayer player, float sidemove, float upmove, float forwardmove)
 	{
 		double d0 = player.posY;
-		player.moveRelative(sidemove, forwardmove, 0.04F);
+		player.moveRelative(sidemove, upmove, forwardmove, 0.04F);
 		player.move(MoverType.SELF, player.motionX, player.motionY, player.motionZ);
 		player.motionX *= 0.800000011920929D;
 		player.motionY *= 0.800000011920929D;
@@ -393,13 +393,13 @@ public class QuakeClientPlayer
 		}
 	}
 
-	public static void minecraft_moveEntityWithHeading(EntityPlayer player, float sidemove, float forwardmove)
+	public static void minecraft_moveEntityWithHeading(EntityPlayer player, float sidemove, float upmove, float forwardmove)
 	{
 		// take care of water and lava movement using default code
 		if ((player.isInWater() && !player.capabilities.isFlying)
 				|| (player.isInLava() && !player.capabilities.isFlying))
 		{
-			player.moveEntityWithHeading(sidemove, forwardmove);
+			player.travel(sidemove, upmove, forwardmove);
 		}
 		else
 		{
@@ -407,7 +407,7 @@ public class QuakeClientPlayer
 			float momentumRetention = getSlipperiness(player);
 
 			// alter motionX/motionZ based on desired movement
-			player.moveRelative(sidemove, forwardmove, minecraft_getMoveSpeed(player));
+			player.moveRelative(sidemove, upmove, forwardmove, minecraft_getMoveSpeed(player));
 
 			// make adjustments for ladder interaction
 			minecraft_ApplyLadderPhysics(player);
@@ -440,7 +440,7 @@ public class QuakeClientPlayer
 	/**
 	 * Moves the entity based on the specified heading.  Args: strafe, forward
 	 */
-	public static boolean quake_moveEntityWithHeading(EntityPlayer player, float sidemove, float forwardmove)
+	public static boolean quake_moveEntityWithHeading(EntityPlayer player, float sidemove, float upmove, float forwardmove)
 	{
 		// take care of lava movement using default code
 		if ((player.isInLava() && !player.capabilities.isFlying))
@@ -450,7 +450,7 @@ public class QuakeClientPlayer
 		else if (player.isInWater() && !player.capabilities.isFlying)
 		{
 			if (ModConfig.SHARKING_ENABLED)
-				quake_WaterMove(player, sidemove, forwardmove);
+				quake_WaterMove(player, sidemove, upmove, forwardmove);
 			else
 			{
 				return false;
@@ -616,7 +616,7 @@ public class QuakeClientPlayer
 		}
 	}
 
-	private static void quake_WaterMove(EntityPlayer player, float sidemove, float forwardmove)
+	private static void quake_WaterMove(EntityPlayer player, float sidemove, float upmove, float forwardmove)
 	{
 		double lastPosY = player.posY;
 
@@ -628,7 +628,7 @@ public class QuakeClientPlayer
 
 		if (!isSharking || curspeed < 0.078F)
 		{
-			minecraft_WaterMove(player, sidemove, forwardmove);
+			minecraft_WaterMove(player, sidemove, upmove, forwardmove);
 		}
 		else
 		{

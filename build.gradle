@@ -7,15 +7,15 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 minecraft {
-    version = "1.11.2-13.20.0.2201"
-    mappings = "snapshot_20161220"
+    version = "14.21.0.2363"
+    mappings = "snapshot_20170625"
     runDir = "run"
 
     coreMod = "squeek.quakemovement.ASMPlugin"

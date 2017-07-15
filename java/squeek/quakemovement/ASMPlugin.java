@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.*;
 
 import java.util.Map;
 
-@IFMLLoadingPlugin.MCVersion("1.11.2")
+@IFMLLoadingPlugin.MCVersion("1.12")
 public class ASMPlugin implements IFMLLoadingPlugin, IClassTransformer
 {
 	public static boolean isObfuscated = false;
@@ -27,15 +27,16 @@ public class ASMPlugin implements IFMLLoadingPlugin, IClassTransformer
 			ClassNode classNode = readClassFromBytes(bytes);
 			MethodNode method;
 
-			method = findMethodNodeOfClass(classNode, isObfuscated ? "g" : "moveEntityWithHeading", "(FF)V");
+			method = findMethodNodeOfClass(classNode, isObfuscated ? "a" : "travel", "(FFF)V");
 			if (method == null)
-				throw new RuntimeException("could not find EntityPlayer.moveEntityWithHeading");
+				throw new RuntimeException("could not find EntityPlayer.travel");
 
 			InsnList loadParameters = new InsnList();
 			loadParameters.add(new VarInsnNode(Opcodes.ALOAD, 0));
 			loadParameters.add(new VarInsnNode(Opcodes.FLOAD, 1));
 			loadParameters.add(new VarInsnNode(Opcodes.FLOAD, 2));
-			injectStandardHook(method, findFirstInstruction(method), CLASS_QUAKE_CLIENT_PLAYER, "moveEntityWithHeading", toMethodDescriptor("Z", CLASS_ENTITY_PLAYER, "F", "F"), loadParameters);
+			loadParameters.add(new VarInsnNode(Opcodes.FLOAD, 3));
+			injectStandardHook(method, findFirstInstruction(method), CLASS_QUAKE_CLIENT_PLAYER, "moveEntityWithHeading", toMethodDescriptor("Z", CLASS_ENTITY_PLAYER, "F", "F", "F"), loadParameters);
 
 			method = findMethodNodeOfClass(classNode, isObfuscated ? "n" : "onLivingUpdate", "()V");
 			if (method == null)
@@ -76,7 +77,7 @@ public class ASMPlugin implements IFMLLoadingPlugin, IClassTransformer
 			ClassNode classNode = readClassFromBytes(bytes);
 			MethodNode method;
 
-			method = findMethodNodeOfClass(classNode, isObfuscated ? "a" : "moveRelative", "(FFF)V");
+			method = findMethodNodeOfClass(classNode, isObfuscated ? "b" : "moveRelative", "(FFFF)V");
 			if (method == null)
 				throw new RuntimeException("could not find Entity.moveRelative");
 
@@ -85,7 +86,8 @@ public class ASMPlugin implements IFMLLoadingPlugin, IClassTransformer
 			loadParameters.add(new VarInsnNode(Opcodes.FLOAD, 1));
 			loadParameters.add(new VarInsnNode(Opcodes.FLOAD, 2));
 			loadParameters.add(new VarInsnNode(Opcodes.FLOAD, 3));
-			injectStandardHook(method, findFirstInstruction(method), CLASS_QUAKE_CLIENT_PLAYER, "moveRelativeBase", toMethodDescriptor("Z", CLASS_ENTITY, "F", "F", "F"), loadParameters);
+			loadParameters.add(new VarInsnNode(Opcodes.FLOAD, 4));
+			injectStandardHook(method, findFirstInstruction(method), CLASS_QUAKE_CLIENT_PLAYER, "moveRelativeBase", toMethodDescriptor("Z", CLASS_ENTITY, "F", "F", "F", "F"), loadParameters);
 
 			return writeClassToBytes(classNode);
 		}

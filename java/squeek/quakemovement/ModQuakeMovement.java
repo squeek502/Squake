@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, name="Squake", acceptedMinecraftVersions="[1.11,1.12)", dependencies = "after:squeedometer")
+@Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, name="Squake", acceptedMinecraftVersions="[1.12,1.13)", dependencies = "after:squeedometer")
 public class ModQuakeMovement
 {
 	// The instance of your mod that Forge uses.
