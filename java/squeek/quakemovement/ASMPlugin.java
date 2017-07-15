@@ -46,7 +46,7 @@ public class ASMPlugin implements IFMLLoadingPlugin, IClassTransformer
 			loadParameters.add(new VarInsnNode(Opcodes.ALOAD, 0));
 			injectSimpleHook(method, findFirstInstruction(method), CLASS_QUAKE_CLIENT_PLAYER, "beforeOnLivingUpdate", toMethodDescriptor("V", CLASS_ENTITY_PLAYER), loadParameters);
 
-			method = findMethodNodeOfClass(classNode, isObfuscated ? "cm" : "jump", "()V");
+			method = findMethodNodeOfClass(classNode, isObfuscated ? "cu" : "jump", "()V");
 			if (method == null)
 				throw new RuntimeException("could not find EntityPlayer.jump");
 
