@@ -99,7 +99,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	@Override
 	public void moveFlying(float sidemove, float forwardmove, float wishspeed)
 	{
-		if ((this.player.capabilities.isFlying && this.player.ridingEntity == null) || this.player.isInWater())
+		if ((this.player.capabilities.isFlying && this.player.ridingEntity == null) || this.player.isInWater() || this.player.isInLava())
 		{
 			super.moveFlying(sidemove, forwardmove, wishspeed);
 			return;
