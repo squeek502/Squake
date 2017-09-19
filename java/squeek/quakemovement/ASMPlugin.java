@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.*;
 
 import java.util.Map;
 
-@IFMLLoadingPlugin.MCVersion("1.12.1")
+@IFMLLoadingPlugin.MCVersion("1.12.2")
 public class ASMPlugin implements IFMLLoadingPlugin, IClassTransformer
 {
 	public static boolean isObfuscated = false;
