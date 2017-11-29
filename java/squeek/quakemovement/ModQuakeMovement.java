@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, name="Squake", acceptedMinecraftVersions="[1.12,1.13)", dependencies = "after:squeedometer")
 public class ModQuakeMovement
@@ -22,6 +23,10 @@ public class ModQuakeMovement
 	{
 		ModConfig.init(event.getSuggestedConfigurationFile());
 		MinecraftForge.EVENT_BUS.register(this);
+		if (event.getSide() == Side.CLIENT)
+		{
+			MinecraftForge.EVENT_BUS.register(new ToggleKeyHandler());
+		}
 	}
 
 	@EventHandler
