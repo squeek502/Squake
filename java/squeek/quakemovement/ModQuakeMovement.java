@@ -26,6 +26,10 @@ public class ModQuakeMovement
 	{
 		ModConfig.init(event.getSuggestedConfigurationFile());
 		MinecraftForge.EVENT_BUS.register(this);
+		if (event.getSide() == Side.CLIENT)
+		{
+			MinecraftForge.EVENT_BUS.register(new ToggleKeyHandler());
+		}
 	}
 
 	@EventHandler
