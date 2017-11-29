@@ -99,7 +99,7 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	@Override
 	public void moveFlying(float sidemove, float forwardmove, float wishspeed)
 	{
-		if ((this.player.capabilities.isFlying && this.player.ridingEntity == null) || this.player.isInWater() || this.player.handleLavaMovement())
+		if ((this.player.capabilities.isFlying && this.player.ridingEntity == null) || this.player.isInWater() || this.player.handleLavaMovement() || this.player.isOnLadder())
 		{
 			super.moveFlying(sidemove, forwardmove, wishspeed);
 			return;
@@ -422,8 +422,14 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	 */
 	public void quake_moveEntityWithHeading(float sidemove, float forwardmove)
 	{
+		// take care of ladder movement using default code
+		if (this.player.isOnLadder())
+		{
+			super.moveEntityWithHeading(sidemove, forwardmove);
+			return;
+		}
 		// take care of lava movement using default code
-		if ((this.player.handleLavaMovement() && !this.player.capabilities.isFlying))
+		else if ((this.player.handleLavaMovement() && !this.player.capabilities.isFlying))
 		{
 			super.moveEntityWithHeading(sidemove, forwardmove);
 			return;
@@ -490,14 +496,8 @@ public class QuakeClientPlayer extends ClientPlayerBase
 				}
 			}
 
-			// make adjustments for ladder interaction
-			minecraft_ApplyLadderPhysics();
-
 			// apply velocity
 			this.player.moveEntity(this.player.motionX, this.player.motionY, this.player.motionZ);
-
-			// climb ladder here for some reason
-			minecraft_ClimbLadder();
 
 			// HL2 code applies half gravity before acceleration and half after acceleration, but this seems to work fine
 			minecraft_ApplyGravity();
