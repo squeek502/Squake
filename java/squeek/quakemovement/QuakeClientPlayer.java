@@ -50,6 +50,9 @@ public class QuakeClientPlayer
 		if (!player.world.isRemote)
 			return false;
 
+		if (!ModConfig.ENABLED)
+			return false;
+
 		boolean didQuakeMovement;
 		double d0 = player.posX;
 		double d1 = player.posY;
@@ -113,7 +116,10 @@ public class QuakeClientPlayer
 		if (!player.world.isRemote)
 			return false;
 
-		if ((player.capabilities.isFlying && player.getRidingEntity() == null) || player.isInWater() || player.isInLava())
+		if (!ModConfig.ENABLED)
+			return false;
+
+		if ((player.capabilities.isFlying && player.getRidingEntity() == null) || player.isInWater() || player.isInLava() || player.isOnLadder())
 		{
 			return false;
 		}
@@ -131,6 +137,9 @@ public class QuakeClientPlayer
 	public static void afterJump(EntityPlayer player)
 	{
 		if (!player.world.isRemote)
+			return;
+
+		if (!ModConfig.ENABLED)
 			return;
 
 		// undo this dumb thing
@@ -442,8 +451,13 @@ public class QuakeClientPlayer
 	 */
 	public static boolean quake_moveEntityWithHeading(EntityPlayer player, float sidemove, float upmove, float forwardmove)
 	{
+		// take care of ladder movement using default code
+		if (player.isOnLadder())
+		{
+			return false;
+		}
 		// take care of lava movement using default code
-		if ((player.isInLava() && !player.capabilities.isFlying))
+		else if ((player.isInLava() && !player.capabilities.isFlying))
 		{
 			return false;
 		}
@@ -508,14 +522,8 @@ public class QuakeClientPlayer
 				}
 			}
 
-			// make adjustments for ladder interaction
-			minecraft_ApplyLadderPhysics(player);
-
 			// apply velocity
 			player.move(MoverType.SELF, player.motionX, player.motionY, player.motionZ);
-
-			// climb ladder here for some reason
-			minecraft_ClimbLadder(player);
 
 			// HL2 code applies half gravity before acceleration and half after acceleration, but this seems to work fine
 			minecraft_ApplyGravity(player);
