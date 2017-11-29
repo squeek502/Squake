@@ -2,6 +2,7 @@ package squeek.quakemovement;
 
 import java.io.File;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
 public class ModConfig
 {
@@ -59,6 +60,11 @@ public class ModConfig
 	private static final String MAX_AIR_ACCEL_PER_TICK_NAME = "maxAirAccelerationPerTick";
 	private static final double MAX_AIR_ACCEL_PER_TICK_DEFAULT = 0.045D;
 
+	public static boolean ENABLED;
+	private static Property ENABLED_PROPERTY;
+	private static final String ENABLED_NAME = "enabled";
+	private static final boolean ENABLED_DEFAULT = true;
+
 	private static Configuration config;
 
 	public static void init(File file)
@@ -84,6 +90,16 @@ public class ModConfig
 
 		INCREASED_FALL_DISTANCE = (float) (config.get(CATEGORY_MOVEMENT, INCREASED_FALL_DISTANCE_NAME, INCREASED_FALL_DISTANCE_DEFAULT, "increases the distance needed to fall in order to take fall damage; this is a server-side setting").getDouble(INCREASED_FALL_DISTANCE_DEFAULT));
 
+		ENABLED_PROPERTY = config.get(CATEGORY_MOVEMENT, ENABLED_NAME, ENABLED_DEFAULT, "turns off/on the quake-style movement for the client (essentially the saved value of the ingame toggle keybind)");
+		ENABLED = ENABLED_PROPERTY.getBoolean(ENABLED_DEFAULT);
+
+		save();
+	}
+
+	public static void setEnabled(boolean enabled)
+	{
+		ModConfig.ENABLED = enabled;
+		ENABLED_PROPERTY.set(enabled);
 		save();
 	}
 
