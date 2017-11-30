@@ -2,6 +2,7 @@ package squeek.quakemovement;
 
 import api.player.client.ClientPlayerAPI;
 import api.player.server.ServerPlayerAPI;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -21,6 +22,10 @@ public class ModQuakeMovement
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		ModConfig.init(event.getSuggestedConfigurationFile());
+		if (event.getSide() == Side.CLIENT)
+		{
+			FMLCommonHandler.instance().bus().register(new ToggleKeyHandler());
+		}
 	}
 
 	@EventHandler

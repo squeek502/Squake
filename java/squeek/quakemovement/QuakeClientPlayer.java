@@ -45,6 +45,12 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	@Override
 	public void moveEntityWithHeading(float sidemove, float forwardmove)
 	{
+		if (!ModConfig.ENABLED)
+		{
+			super.moveEntityWithHeading(sidemove, forwardmove);
+			return;
+		}
+
 		double d0 = this.player.posX;
 		double d1 = this.player.posY;
 		double d2 = this.player.posZ;
@@ -100,6 +106,12 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	@Override
 	public void moveFlying(float sidemove, float forwardmove, float wishspeed)
 	{
+		if (!ModConfig.ENABLED)
+		{
+			super.moveFlying(sidemove, forwardmove, wishspeed);
+			return;
+		}
+
 		if ((this.player.capabilities.isFlying && this.player.ridingEntity == null) || this.player.isInWater() || this.player.handleLavaMovement() || this.player.isOnLadder())
 		{
 			super.moveFlying(sidemove, forwardmove, wishspeed);
@@ -117,6 +129,9 @@ public class QuakeClientPlayer extends ClientPlayerBase
 	public void jump()
 	{
 		super.jump();
+
+		if (!ModConfig.ENABLED)
+			return;
 
 		// undo this dumb thing
 		if (this.player.isSprinting())
