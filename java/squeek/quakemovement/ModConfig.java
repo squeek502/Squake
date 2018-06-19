@@ -1,12 +1,15 @@
 package squeek.quakemovement;
 
-import java.io.File;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.io.File;
 
 public class ModConfig
 {
-	private static final String CATEGORY_MOVEMENT = "movement";
+	public static final String CATEGORY_MOVEMENT = "movement";
 
 	public static float TRIMP_MULTIPLIER;
 	private static final String TRIMP_MULTIPLIER_NAME = "trimpMultiplier";
@@ -65,14 +68,19 @@ public class ModConfig
 	private static final String ENABLED_NAME = "enabled";
 	private static final boolean ENABLED_DEFAULT = true;
 
-	private static Configuration config;
+	public static Configuration config;
 
 	public static void init(File file)
 	{
-		config = new Configuration(file);
+		if (config == null)
+		{
+			config = new Configuration(file);
+			load();
+		}
+	}
 
-		load();
-
+	public static void load()
+	{
 		UNCAPPED_BUNNYHOP_ENABLED = config.get(CATEGORY_MOVEMENT, UNCAPPED_BUNNYHOP_ENABLED_NAME, UNCAPPED_BUNNYHOP_ENABLED_DEFAULT, "if enabled, the soft and hard caps will not be applied at all").getBoolean(UNCAPPED_BUNNYHOP_ENABLED_DEFAULT);
 		AIR_ACCELERATE = config.get(CATEGORY_MOVEMENT, AIR_ACCELERATE_NAME, AIR_ACCELERATE_DEFAULT, "a higher value means you can turn more sharply in the air without losing speed").getDouble(AIR_ACCELERATE_DEFAULT);
 		MAX_AIR_ACCEL_PER_TICK = config.get(CATEGORY_MOVEMENT, MAX_AIR_ACCEL_PER_TICK_NAME, MAX_AIR_ACCEL_PER_TICK_DEFAULT, "a higher value means faster air acceleration").getDouble(MAX_AIR_ACCEL_PER_TICK_DEFAULT);
@@ -105,11 +113,18 @@ public class ModConfig
 
 	public static void save()
 	{
-		config.save();
+		if (config.hasChanged())
+		{
+			config.save();
+		}
 	}
 
-	public static void load()
+	@SubscribeEvent
+	public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
-		config.load();
+		if (event.getModID().equalsIgnoreCase(ModInfo.MODID))
+		{
+			load();
+		}
 	}
 }
