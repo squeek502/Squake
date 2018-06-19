@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, acceptedMinecraftVersions="[1.10,1.11)", dependencies = "required-after:PlayerAPI;after:Squeedometer")
+@Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, acceptedMinecraftVersions="[1.10,1.11)", dependencies = "required-after:PlayerAPI;after:Squeedometer", guiFactory = ModInfo.CONFIG_GUI_FACTORY_CLASS)
 public class ModQuakeMovement
 {
 	// The instance of your mod that Forge uses.
@@ -25,6 +25,7 @@ public class ModQuakeMovement
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		ModConfig.init(event.getSuggestedConfigurationFile());
+		MinecraftForge.EVENT_BUS.register(new ModConfig());
 		MinecraftForge.EVENT_BUS.register(this);
 		if (event.getSide() == Side.CLIENT)
 		{
