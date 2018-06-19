@@ -1,33 +1,20 @@
 package squeek.quakemovement;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraftforge.common.config.ConfigElement;
+import net.minecraftforge.fml.client.DefaultGuiFactory;
+import net.minecraftforge.fml.client.config.GuiConfig;
 
-import java.util.Set;
-
-public class ModConfigGuiFactory implements IModGuiFactory
+public class ModConfigGuiFactory extends DefaultGuiFactory
 {
-	@Override
-	public void initialize(Minecraft minecraftInstance)
+	public ModConfigGuiFactory()
 	{
+		super(ModInfo.MODID, GuiConfig.getAbridgedConfigPath(ModConfig.config.toString()));
 	}
 
 	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass()
+	public GuiScreen createConfigGui(GuiScreen parentScreen)
 	{
-		return ModConfigGui.class;
-	}
-
-	@Override
-	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
-	{
-		return null;
-	}
-
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element)
-	{
-		return null;
+		return new GuiConfig(parentScreen, new ConfigElement(ModConfig.config.getCategory(ModConfig.CATEGORY_MOVEMENT)).getChildElements(), modid, false, false, title);
 	}
 }
