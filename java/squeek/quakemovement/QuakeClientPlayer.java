@@ -293,7 +293,7 @@ public class QuakeClientPlayer
 
 	private static void minecraft_ApplyGravity(EntityPlayer player)
 	{
-		if (player.world.isRemote && (!player.world.isBlockLoaded(new BlockPos((int)player.posX, 0, (int)player.posZ)) || !player.world.getChunkFromBlockCoords(new BlockPos((int) player.posX, (int) player.posY, (int) player.posZ)).isLoaded()))
+		if (player.world.isRemote && (!player.world.isBlockLoaded(new BlockPos((int)player.posX, (int)player.posY, (int)player.posZ)) || !player.world.getChunkFromBlockCoords(new BlockPos((int) player.posX, (int) player.posY, (int) player.posZ)).isLoaded()))
 		{
 			if (player.posY > 0.0D)
 			{
