@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "squeek.quakemovement.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "PlayerEntityMixin",
+    "TestBlockMixin"
+  ],
+  "client": [
+    "LivingEntityMixin",
+    "EntityMixin",
+    "KeyPressMixin",
+    "TestSpeedometerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

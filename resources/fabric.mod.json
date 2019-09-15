@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "squake",
+  "version": "${version}",
+
+  "name": "Squake",
+  "description": "Quake-style movement (bunnyhopping, etc) in Minecraft",
+  "authors": [
+    "squeek502"
+  ],
+  "contact": {
+    "sources": "https://github.com/squeek502/Squake"
+  },
+
+  "license": "Unlicense",
+  "icon": "assets/squake/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "squeek.quakemovement.ModQuakeMovement"
+    ],
+    "client": [
+      "squeek.quakemovement.KeyBindInitializer"
+    ]
+  },
+  "mixins": [
+    "squake.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0"
+  }
+}

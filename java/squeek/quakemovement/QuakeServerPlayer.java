@@ -1,6 +1,6 @@
 package squeek.quakemovement;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class QuakeServerPlayer
 {
@@ -8,19 +8,19 @@ public class QuakeServerPlayer
 	// because we only care about the state before it has any possibility of changing
 	private static boolean wasVelocityChangedBeforeFall = false;
 
-	public static void beforeFall(EntityPlayer player, float fallDistance, float damageMultiplier)
+	public static void beforeFall(PlayerEntity player, float fallDistance, float damageMultiplier)
 	{
-		if (player.world.isRemote)
+		if (player.world.isClient)
 			return;
 
-		wasVelocityChangedBeforeFall = player.velocityChanged;
+		wasVelocityChangedBeforeFall = player.velocityModified;
 	}
 
-	public static void afterFall(EntityPlayer player, float fallDistance, float damageMultiplier)
+	public static void afterFall(PlayerEntity player, float fallDistance, float damageMultiplier)
 	{
-		if (player.world.isRemote)
+		if (player.world.isClient)
 			return;
 
-		player.velocityChanged = wasVelocityChangedBeforeFall;
+		player.velocityModified = wasVelocityChangedBeforeFall;
 	}
 }
