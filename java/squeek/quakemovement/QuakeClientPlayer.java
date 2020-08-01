@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -233,9 +234,12 @@ public class QuakeClientPlayer
 
 	private static void minecraft_ApplyGravity(PlayerEntity player)
 	{
-		//BlockPos pos = new BlockPos((int) player.x, (int) player.y, (int) player.z);
+		BlockPos pos = new BlockPos((int) player.getX(), (int) player.getY(), (int) player.getZ());
 		double velocityY = player.getVelocity().y;
-		if (/*player.world.isClient && !player.world.isBlockLoaded(pos)*/ false) //todo fix
+		if (player.hasStatusEffect(StatusEffects.LEVITATION)) {
+			velocityY += (0.05D * (double)(player.getStatusEffect(StatusEffects.LEVITATION).getAmplifier() + 1) - /*vec3d6.y*/ velocityY) * 0.2D;
+			player.fallDistance = 0.0F;
+		} else if (player.world.isClient && !player.world.isChunkLoaded(pos))
 		{
 			if (player.getY() > 0.0D)
 			{
