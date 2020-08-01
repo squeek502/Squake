@@ -3,8 +3,6 @@ package squeek.quakemovement;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.effect.StatusEffects;
@@ -267,58 +265,6 @@ public class QuakeClientPlayer
 		player.setVelocity(player.getVelocity().multiply(momentumRetention, 1, momentumRetention));
 	}
 
-	/*
-	private static void minecraft_ApplyLadderPhysics(PlayerEntity player)
-	{
-		if (player.canClimb())
-		{
-			float f5 = 0.15F;
-
-			if (player.velocityX < (-f5))
-			{
-				player.velocityX = (-f5);
-			}
-
-			if (player.velocityX > f5)
-			{
-				player.velocityX = f5;
-			}
-
-			if (player.velocityZ < (-f5))
-			{
-				player.velocityZ = (-f5);
-			}
-
-			if (player.velocityZ > f5)
-			{
-				player.velocityZ = f5;
-			}
-
-			player.fallDistance = 0.0F;
-
-			if (player.velocityY < -0.15D)
-			{
-				player.velocityY = -0.15D;
-			}
-
-			boolean flag = player.isSneaking();
-
-			if (flag && player.velocityY < 0.0D)
-			{
-				player.velocityY = 0.0D;
-			}
-		}
-	}
-
-	private static void minecraft_ClimbLadder(PlayerEntity player)
-	{
-		if (player.horizontalCollision && player.canClimb())
-		{
-			player.velocityY = 0.2D;
-		}
-	}
-	*/
-
 	private static void minecraft_SwingLimbsBasedOnMovement(PlayerEntity player)
 	{
 		player.lastLimbDistance = player.limbDistance;
@@ -351,42 +297,6 @@ public class QuakeClientPlayer
 			player.setVelocity(velocity.x, 0.30000001192092896D, velocity.z);
 		}
 	}
-
-	/*
-	public static void minecraft_moveEntityWithHeading(PlayerEntity player, float sidemove, float upmove, float forwardmove)
-	{
-		// take care of water and lava movement using default code
-		if ((player.isInWater() && !player.abilities.flying)
-			|| (player.isTouchingLava() && !player.abilities.flying))
-		{
-			player.travel(sidemove, upmove, forwardmove);
-		}
-		else
-		{
-			// get friction
-			float momentumRetention = getSlipperiness(player);
-
-			// alter motionX/motionZ based on desired movement
-			player.moveRelative(sidemove, upmove, forwardmove, minecraft_getMoveSpeed(player));
-
-			// make adjustments for ladder interaction
-			minecraft_ApplyLadderPhysics(player);
-
-			// do the movement
-			player.move(MovementType.field_6308, player.velocityX, player.velocityY, player.velocityZ);
-
-			// climb ladder here for some reason
-			minecraft_ClimbLadder(player);
-
-			// gravity + friction
-			minecraft_ApplyGravity(player);
-			minecraft_ApplyFriction(player, momentumRetention);
-
-			// swing them arms
-			minecraft_SwingLimbsBasedOnMovement(player);
-		}
-	}
-	*/
 
 	/* =================================================
 	 * END MINECRAFT PHYSICS
@@ -530,29 +440,6 @@ public class QuakeClientPlayer
 	private static void quake_ApplyWaterFriction(PlayerEntity player, double friction)
 	{
 		player.setVelocity(player.getVelocity().multiply(friction));
-
-		/*
-		float speed = (float)(player.getSpeed());
-		float newspeed = 0.0F;
-		if (speed != 0.0F)
-		{
-			newspeed = speed - 0.05F * speed * friction; //* player->m_surfaceFriction;
-
-			float mult = newspeed/speed;
-			player.velocityX *= mult;
-			player.velocityY *= mult;
-			player.velocityZ *= mult;
-		}
-
-		return newspeed;
-		*/
-
-		/*
-		// slow in water
-		player.velocityX *= 0.800000011920929D;
-		player.velocityY *= 0.800000011920929D;
-		player.velocityZ *= 0.800000011920929D;
-		*/
 	}
 
 	@SuppressWarnings("unused")

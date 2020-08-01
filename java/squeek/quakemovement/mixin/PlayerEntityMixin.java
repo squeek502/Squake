@@ -10,11 +10,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import squeek.quakemovement.ModConfig;
 import squeek.quakemovement.QuakeClientPlayer;
-import squeek.quakemovement.QuakeServerPlayer;
 import squeek.quakemovement.QuakeClientPlayer.IsJumpingGetter;
 
 @Mixin(PlayerEntity.class)
@@ -43,18 +41,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IsJumpin
 	private void afterJump(CallbackInfo info)
 	{
 		QuakeClientPlayer.afterJump((PlayerEntity) (Object) this);
-	}
-
-	@Inject(at = @At("HEAD"), method = "handleFallDamage")
-	private void beforeFall(float fallDistance, float damageMultiplier, CallbackInfoReturnable<Boolean> info)
-	{
-		QuakeServerPlayer.beforeFall((PlayerEntity) (Object) this, fallDistance, damageMultiplier);
-	}
-
-	@Inject(at = @At("TAIL"), method = "handleFallDamage")
-	private void afterFall(float fallDistance, float damageMultiplier, CallbackInfoReturnable<Boolean> info)
-	{
-		QuakeServerPlayer.afterFall((PlayerEntity) (Object) this, fallDistance, damageMultiplier);
 	}
 
 	@Override
