@@ -7,12 +7,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -221,6 +224,31 @@ public class QuakeClientPlayer
 		return ((IsJumpingGetter) player).isJumping();
 	}
 
+	private static boolean isInWater(Box box, World world) {
+		int i = MathHelper.floor(box.minX);
+      	int j = MathHelper.ceil(box.maxX);
+      	int k = MathHelper.floor(box.minY);
+      	int l = MathHelper.ceil(box.maxY);
+      	int m = MathHelper.floor(box.minZ);
+      	int n = MathHelper.ceil(box.maxZ);
+      	if (!world.isRegionLoaded(i, k, m, j, l, n)) {
+			return false;
+		}
+		BlockPos.Mutable mutable = new BlockPos.Mutable();
+		for(int p = i; p < j; ++p) {
+            for(int q = k; q < l; ++q) {
+               	for(int r = m; r < n; ++r) {
+                  	mutable.set(p, q, r);
+					FluidState fluidState = world.getFluidState(mutable);
+					if (fluidState.isIn(FluidTags.WATER)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	/* =================================================
 	 * END HELPERS
 	 * =================================================
@@ -376,7 +404,7 @@ public class QuakeClientPlayer
 				if (ModConfig.SHARKING_ENABLED && ModConfig.SHARKING_SURFACE_TENSION > 0.0D && isJumping(player) && player.getVelocity().y < 0.0F)
 				{
 					Box axisalignedbb = player.getBoundingBox().offset(player.getVelocity());
-					boolean isFallingIntoWater = false;//player.world.containsBlockWithMaterial(axisalignedbb, Material.WATER); //todo fix
+					boolean isFallingIntoWater = isInWater(axisalignedbb, player.world);
 
 					if (isFallingIntoWater)
 						player.setVelocity(player.getVelocity().multiply(1.0D, ModConfig.SHARKING_SURFACE_TENSION, 1.0D));
