@@ -3,12 +3,9 @@
   "package": "squeek.quakemovement.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "PlayerEntityMixin",
-    "TestBlockMixin"
+    "PlayerEntityMixin"
   ],
   "client": [
-    "LivingEntityMixin",
-    "EntityMixin",
     "KeyPressMixin",
     "TestSpeedometerMixin"
   ],

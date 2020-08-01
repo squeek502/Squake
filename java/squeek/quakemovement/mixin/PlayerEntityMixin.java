@@ -1,7 +1,11 @@
 package squeek.quakemovement.mixin;
 
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,10 +15,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import squeek.quakemovement.ModConfig;
 import squeek.quakemovement.QuakeClientPlayer;
 import squeek.quakemovement.QuakeServerPlayer;
+import squeek.quakemovement.QuakeClientPlayer.IsJumpingGetter;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin
-{
+public abstract class PlayerEntityMixin extends LivingEntity implements IsJumpingGetter {
+	private PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+		super(entityType, world);
+	}
+
 	@Inject(at = @At("HEAD"), method = "travel(Lnet/minecraft/util/math/Vec3d;)V", cancellable = true)
 	private void travel(Vec3d movementInput, CallbackInfo info)
 	{
@@ -47,5 +55,24 @@ public abstract class PlayerEntityMixin
 	private void afterFall(float fallDistance, float damageMultiplier, CallbackInfoReturnable<Boolean> info)
 	{
 		QuakeServerPlayer.afterFall((PlayerEntity) (Object) this, fallDistance, damageMultiplier);
+	}
+
+	@Override
+	public void updateVelocity(float speed, Vec3d movementInput) {
+		if (!ModConfig.ENABLED || !world.isClient) {
+			super.updateVelocity(speed, movementInput);
+			return;
+		}
+
+		if (QuakeClientPlayer.updateVelocity(this, movementInput, speed)) {
+			return;
+		}
+		super.updateVelocity(speed, movementInput);
+	}
+
+	@Override
+	public boolean isJumping()
+	{
+		return this.jumping;
 	}
 }
