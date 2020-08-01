@@ -336,16 +336,16 @@ public class QuakeClientPlayer
 
 	private static void minecraft_WaterMove(PlayerEntity player, Vec3d movementInput)
 	{
-		//		double d0 = player.y;
-		//		player.updateVelocity(0.04F, movementInput);
-		//		player.move(MovementType.SELF, player.getVelocity());
-		//		Vec3d velocity = player.getVelocity().multiply(0.800000011920929D).add(0, 0.02D, 0);
-		//		player.setVelocity(velocity);
-		//
-		//		if (player.horizontalCollision && player.method_5654(velocity.x, velocity.y + 0.6000000238418579D - player.y + d0, velocity.z))
-		//		{
-		//			player.setVelocity(velocity.x, 0.30000001192092896D, velocity.z);
-		//		}
+		double d0 = player.getY();
+		player.updateVelocity(0.04F, movementInput);
+		player.move(MovementType.SELF, player.getVelocity());
+		Vec3d velocity = player.getVelocity().multiply(0.800000011920929D).add(0, 0.02D, 0);
+		player.setVelocity(velocity);
+
+		if (player.horizontalCollision && player.doesNotCollide(velocity.x, velocity.y + 0.6000000238418579D - player.getY() + d0, velocity.z))
+		{
+			player.setVelocity(velocity.x, 0.30000001192092896D, velocity.z);
+		}
 	}
 
 	/*
@@ -411,12 +411,12 @@ public class QuakeClientPlayer
 		}
 		else if (player.isTouchingWater() && !player.abilities.flying)
 		{
-			//			if (ModConfig.SHARKING_ENABLED)
-			//				quake_WaterMove(player, (float) movementInput.x, (float) movementInput.y, (float) movementInput.z);
-			//			else
-			//			{
-			return false;
-			//			}
+			if (ModConfig.SHARKING_ENABLED)
+				quake_WaterMove(player, (float) movementInput.x, (float) movementInput.y, (float) movementInput.z);
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{

@@ -28,7 +28,7 @@ public class ModConfig
 	public static double SHARKING_SURFACE_TENSION = SHARKING_SURFACE_TENSION_DEFAULT;
 	private static final String SHARKING_SURFACE_TENSION_NAME = "sharkingSurfaceTension";
 
-	private static final double SHARKING_WATER_FRICTION_DEFAULT = 0.1D;
+	private static final double SHARKING_WATER_FRICTION_DEFAULT = 0.99D;
 	public static double SHARKING_WATER_FRICTION = SHARKING_WATER_FRICTION_DEFAULT;
 	private static final String SHARKING_WATER_FRICTION_NAME = "sharkingWaterFriction";
 
