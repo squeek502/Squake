@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.effect.StatusEffects;
@@ -339,7 +340,10 @@ public class QuakeClientPlayer
 		double d0 = player.getY();
 		player.updateVelocity(0.04F, movementInput);
 		player.move(MovementType.SELF, player.getVelocity());
-		Vec3d velocity = player.getVelocity().multiply(0.800000011920929D).add(0, 0.02D, 0);
+		Vec3d velocity = player.getVelocity().multiply(0.800000011920929D);
+		if (!player.isSwimming()) {
+			velocity = velocity.add(0, -0.01, 0);
+		}
 		player.setVelocity(velocity);
 
 		if (player.horizontalCollision && player.doesNotCollide(velocity.x, velocity.y + 0.6000000238418579D - player.getY() + d0, velocity.z))
