@@ -31,7 +31,7 @@ public class QuakeClientPlayer
 		if (!player.world.isClient)
 			return false;
 
-		if (!ModConfig.ENABLED)
+		if (!ModQuakeMovement.CONFIG.isEnabled())
 			return false;
 
 		boolean didQuakeMovement;
@@ -74,7 +74,7 @@ public class QuakeClientPlayer
 		if (!player.world.isClient)
 			return false;
 
-		if (!ModConfig.ENABLED)
+		if (!ModQuakeMovement.CONFIG.isEnabled())
 			return false;
 
 		if ((player.abilities.flying && !player.hasVehicle()) || player.isTouchingWater() || player.isInLava() || !player.abilities.flying)
@@ -97,7 +97,7 @@ public class QuakeClientPlayer
 		if (!player.world.isClient)
 			return;
 
-		if (!ModConfig.ENABLED)
+		if (!ModQuakeMovement.CONFIG.isEnabled())
 			return;
 
 		// undo this dumb thing
@@ -353,7 +353,7 @@ public class QuakeClientPlayer
 		}
 		else if (player.isTouchingWater() && !player.abilities.flying)
 		{
-			if (ModConfig.SHARKING_ENABLED)
+			if (ModQuakeMovement.CONFIG.isSharkingEnabled())
 				quake_WaterMove(player, (float) movementInput.x, (float) movementInput.y, (float) movementInput.z);
 			else
 			{
@@ -375,7 +375,7 @@ public class QuakeClientPlayer
 				//quake_Friction(); // buggy because material-based friction uses a totally different format
 				minecraft_ApplyFriction(player, momentumRetention);
 
-				double sv_accelerate = ModConfig.ACCELERATE;
+				double sv_accelerate = ModQuakeMovement.CONFIG.getGroundAccelerate();
 
 				if (wishspeed != 0.0F)
 				{
@@ -398,16 +398,16 @@ public class QuakeClientPlayer
 			// air movement
 			else
 			{
-				double sv_airaccelerate = ModConfig.AIR_ACCELERATE;
+				double sv_airaccelerate = ModQuakeMovement.CONFIG.getAirAccelerate();
 				quake_AirAccelerate(player, wishspeed, wishdir[0], wishdir[1], sv_airaccelerate);
 
-				if (ModConfig.SHARKING_ENABLED && ModConfig.SHARKING_SURFACE_TENSION > 0.0D && isJumping(player) && player.getVelocity().y < 0.0F)
+				if (ModQuakeMovement.CONFIG.isSharkingEnabled() && ModQuakeMovement.CONFIG.getSharkingSurfaceTension() > 0.0D && isJumping(player) && player.getVelocity().y < 0.0F)
 				{
 					Box axisalignedbb = player.getBoundingBox().offset(player.getVelocity());
 					boolean isFallingIntoWater = isInWater(axisalignedbb, player.world);
 
 					if (isFallingIntoWater)
-						player.setVelocity(player.getVelocity().multiply(1.0D, ModConfig.SHARKING_SURFACE_TENSION, 1.0D));
+						player.setVelocity(player.getVelocity().multiply(1.0D, ModQuakeMovement.CONFIG.getSharkingSurfaceTension(), 1.0D));
 				}
 			}
 
@@ -438,7 +438,7 @@ public class QuakeClientPlayer
 
 	private static boolean quake_DoTrimp(PlayerEntity player)
 	{
-		if (ModConfig.TRIMPING_ENABLED && player.isSneaking())
+		if (ModQuakeMovement.CONFIG.isTrimpEnabled() && player.isSneaking())
 		{
 			double curspeed = getSpeed(player);
 			float movespeed = quake_getMaxMoveSpeed(player);
@@ -448,11 +448,11 @@ public class QuakeClientPlayer
 				if (speedbonus > 1.0F)
 					speedbonus = 1.0F;
 
-				player.setVelocity(player.getVelocity().add(0, speedbonus * curspeed * ModConfig.TRIMP_MULTIPLIER, 0));
+				player.setVelocity(player.getVelocity().add(0, speedbonus * curspeed * ModQuakeMovement.CONFIG.getTrimpMultiplier(), 0));
 
-				if (ModConfig.TRIMP_MULTIPLIER > 0)
+				if (ModQuakeMovement.CONFIG.getTrimpMultiplier() > 0)
 				{
-					float mult = 1.0f / ModConfig.TRIMP_MULTIPLIER;
+					float mult = 1.0f / ModQuakeMovement.CONFIG.getTrimpMultiplier();
 					player.setVelocity(player.getVelocity().multiply(mult, 1, mult));
 				}
 
@@ -505,12 +505,12 @@ public class QuakeClientPlayer
 		else
 		{
 			if (curspeed > 0.09)
-				quake_ApplyWaterFriction(player, ModConfig.SHARKING_WATER_FRICTION);
+				quake_ApplyWaterFriction(player, ModQuakeMovement.CONFIG.getSharkingWaterFriction());
 
 			if (curspeed > 0.098)
-				quake_AirAccelerate(player, wishspeed, wishdir[0], wishdir[1], ModConfig.ACCELERATE);
+				quake_AirAccelerate(player, wishspeed, wishdir[0], wishdir[1], ModQuakeMovement.CONFIG.getGroundAccelerate());
 			else
-				quake_Accelerate(player, .0980F, wishdir[0], wishdir[1], ModConfig.ACCELERATE);
+				quake_Accelerate(player, .0980F, wishdir[0], wishdir[1], ModQuakeMovement.CONFIG.getGroundAccelerate());
 
 			player.move(MovementType.SELF, player.getVelocity());
 
@@ -565,7 +565,7 @@ public class QuakeClientPlayer
 		double addspeed, accelspeed, currentspeed;
 
 		float wishspd = wishspeed;
-		float maxAirAcceleration = (float) ModConfig.MAX_AIR_ACCEL_PER_TICK;
+		float maxAirAcceleration = (float) ModQuakeMovement.CONFIG.getMaxAirAccelerationPerTick();
 
 		if (wishspd > maxAirAcceleration)
 			wishspd = maxAirAcceleration;
@@ -641,10 +641,10 @@ public class QuakeClientPlayer
 
 	private static void quake_ApplySoftCap(PlayerEntity player, float movespeed)
 	{
-		float softCapPercent = ModConfig.SOFT_CAP;
-		float softCapDegen = ModConfig.SOFT_CAP_DEGEN;
+		float softCapPercent = ModQuakeMovement.CONFIG.getSoftCapThreshold();
+		float softCapDegen = ModQuakeMovement.CONFIG.getSoftCapDegen();
 
-		if (ModConfig.UNCAPPED_BUNNYHOP_ENABLED)
+		if (ModQuakeMovement.CONFIG.isUncappedBunnyhopEnabled())
 		{
 			softCapPercent = 1.0F;
 			softCapDegen = 1.0F;
@@ -669,10 +669,10 @@ public class QuakeClientPlayer
 
 	private static void quake_ApplyHardCap(PlayerEntity player, float movespeed)
 	{
-		if (ModConfig.UNCAPPED_BUNNYHOP_ENABLED)
+		if (ModQuakeMovement.CONFIG.isUncappedBunnyhopEnabled())
 			return;
 
-		float hardCapPercent = ModConfig.HARD_CAP;
+		float hardCapPercent = ModQuakeMovement.CONFIG.getHardCapThreshold();
 
 		float speed = (float) (getSpeed(player));
 		float hardCap = movespeed * hardCapPercent;

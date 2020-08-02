@@ -12,12 +12,27 @@ group = project.maven_group
 sourceSets.main.java.srcDirs += 'java'
 sourceSets.main.resources.srcDirs += 'resources'
 
+repositories {
+	maven {
+		name = "ModMenu"
+		url = "https://maven.fabricmc.net/io/github/prospector/modmenu/"
+	}
+	jcenter()
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:0.16.2+build.385-1.16.1"
+	modImplementation "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+	include "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+
+	modImplementation "me.shedaniel.cloth:config-2:${project.cloth_version}"  
+	include "me.shedaniel.cloth:config-2:${project.cloth_version}"
+
+	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 }
 
 processResources {

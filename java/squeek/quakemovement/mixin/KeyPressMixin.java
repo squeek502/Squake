@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import squeek.quakemovement.KeyBindInitializer;
-import squeek.quakemovement.ModConfig;
 import squeek.quakemovement.ModInfo;
+import squeek.quakemovement.ModQuakeMovement;
 
 @Mixin(MinecraftClient.class)
 public class KeyPressMixin
@@ -18,9 +18,9 @@ public class KeyPressMixin
 	{
 		if (KeyBindInitializer.ENABLE.wasPressed())
 		{
-			ModConfig.ENABLED = !ModConfig.ENABLED;
+			ModQuakeMovement.CONFIG.setEnabled(!ModQuakeMovement.CONFIG.isEnabled());
 
-			String feedback = ModConfig.ENABLED ? I18n.translate("squake.key.toggle.enabled") : I18n.translate("squake.key.toggle.disabled");
+			String feedback = ModQuakeMovement.CONFIG.isEnabled() ? I18n.translate("squake.key.toggle.enabled") : I18n.translate("squake.key.toggle.disabled");
 			MinecraftClient.getInstance().player.sendChatMessage("[" + ModInfo.MODID + "] " + feedback);
 		}
 	}

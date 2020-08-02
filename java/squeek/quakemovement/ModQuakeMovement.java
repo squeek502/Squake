@@ -1,23 +1,26 @@
 package squeek.quakemovement;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+
+import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModQuakeMovement implements ModInitializer
-{
-	@Override
-	public void onInitialize()
-	{
-		//todo why is this here?
+public class ModQuakeMovement implements ModInitializer {
+	public static final ModConfig CONFIG;
+
+	static {
+		AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
+		CONFIG = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 	}
 
-	public static float getFriction()
-	{
-		return 0.6f;
+	@Override
+	public void onInitialize() {
+		//Cause this class to be loaded so the config loads on startup
 	}
 
 	public static void drawSpeedometer(MatrixStack matrixStack)

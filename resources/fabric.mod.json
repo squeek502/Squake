@@ -22,6 +22,9 @@
     ],
     "client": [
       "squeek.quakemovement.KeyBindInitializer"
+    ],
+    "modmenu" : [
+      "squeek.quakemovement.ModMenuIntegration"
     ]
   },
   "mixins": [
