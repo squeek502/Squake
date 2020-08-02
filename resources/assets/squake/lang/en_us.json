@@ -16,5 +16,8 @@
     "text.autoconfig.squake.option.enabled": "Enabled",
     
     "fabric.mods.squake": "Squake Reloaded",
-    "fabric.mods.squake.enable": "Toggle Squake Movement"
+    "fabric.mods.squake.enable": "Toggle Squake Movement",
+
+    "squake.key.toggle.enabled": "Squake Reloaded Movement: Enabled",
+    "squake.key.toggle.disabled": "Squake Reloaded Movement: Disabled"
 }
