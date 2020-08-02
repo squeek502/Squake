@@ -13,5 +13,8 @@
 	"text.autoconfig.squake.option.trimpEnabled": "Trimp Enabled",
 	"text.autoconfig.squake.option.fallDistanceThresholdIncrease": "Fall Distance Threshold Increase",
 	"text.autoconfig.squake.option.maxAirAccelerationPerTick": "Max Air Acceleration Per Tick",
-	"text.autoconfig.squake.option.enabled": "Enabled"
+    "text.autoconfig.squake.option.enabled": "Enabled",
+    
+    "fabric.mods.squake": "Squake Reloaded",
+    "fabric.mods.squake.enable": "Toggle Squake Movement"
 }

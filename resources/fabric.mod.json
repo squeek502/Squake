@@ -3,9 +3,10 @@
   "id": "squake",
   "version": "${version}",
 
-  "name": "Squake",
+  "name": "Squake Reloaded",
   "description": "Quake-style movement (bunnyhopping, etc) in Minecraft",
   "authors": [
+    "ThatTrollzer/CoolMineman",
     "squeek502"
   ],
   "contact": {
