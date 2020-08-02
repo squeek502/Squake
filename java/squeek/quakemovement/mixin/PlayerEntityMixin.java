@@ -11,8 +11,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import squeek.quakemovement.ModConfig;
-import squeek.quakemovement.ModInfo;
 import squeek.quakemovement.ModQuakeMovement;
 import squeek.quakemovement.QuakeClientPlayer;
 import squeek.quakemovement.QuakeClientPlayer.IsJumpingGetter;
