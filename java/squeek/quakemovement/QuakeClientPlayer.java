@@ -24,8 +24,10 @@ import java.util.Random;
 
 public class QuakeClientPlayer
 {
+	private QuakeClientPlayer(){}
+
 	private static Random random = new Random();
-	private static List<double[]> baseVelocities = new ArrayList<double[]>();
+	private static List<double[]> baseVelocities = new ArrayList<>();
 
 	public static boolean travel(PlayerEntity player, Vec3d movementInput)
 	{
@@ -142,7 +144,6 @@ public class QuakeClientPlayer
 		float f2 = 0.91F;
 		if (player.isOnGround())
 		{
-			f2 = 0.54600006F;
 			BlockPos groundPos = new BlockPos(MathHelper.floor(player.getX()), MathHelper.floor(player.getBoundingBox().minY) - 1, MathHelper.floor(player.getZ()));
 			Block ground = player.world.getBlockState(groundPos).getBlock();
 
