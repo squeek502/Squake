@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import squeek.quakemovement.ModQuakeMovement;
 import squeek.quakemovement.QuakeClientPlayer;
@@ -67,12 +68,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IsJumpin
 	boolean velocityHack = false;
 
 	@Inject(at = @At("HEAD"), method = "handleFallDamage")
-	private void preHandleFallDamage() {
+	private void preHandleFallDamage(float fallDistance, float damageMultiplier, CallbackInfoReturnable<Boolean> info) {
 		velocityHack = velocityModified;
 	}
 	
 	@Inject(at = @At("RETURN"), method = "handleFallDamage")
-	private void postHandleFallDamage() {
-		velocityModified = velocityHack;
+	private void postHandleFallDamage(float fallDistance, float damageMultiplier, CallbackInfoReturnable<Boolean> info) {
+		if (!world.isClient) velocityModified = velocityHack;
 	}
 }
