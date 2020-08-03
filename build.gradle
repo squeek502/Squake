@@ -48,7 +48,7 @@ dependencies {
 	include "me.shedaniel.cloth:config-2:${project.cloth_version}"
 
 	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-	modImplementation "com.github.Chainmail-Studios:Astromine:1.3.5"
+	modImplementation "com.github.Chainmail-Studios:Astromine:0c76191"
 }
 
 processResources {
