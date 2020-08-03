@@ -3,6 +3,7 @@ package squeek.quakemovement.mixin;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -60,5 +61,18 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IsJumpin
 	public boolean isJumping()
 	{
 		return this.jumping;
+	}
+
+	//Fixes Fall Damage Negating Speed See: https://github.com/CoolMineman/Squake/commit/61c4622bca4209d60c7e7d61a59e5a5933ae844a#commitcomment-41109936
+	boolean velocityHack = false;
+
+	@Inject(at = @At("HEAD"), method = "handleFallDamage")
+	private void preHandleFallDamage() {
+		velocityHack = velocityModified;
+	}
+	
+	@Inject(at = @At("RETURN"), method = "handleFallDamage")
+	private void postHandleFallDamage() {
+		velocityModified = velocityHack;
 	}
 }
