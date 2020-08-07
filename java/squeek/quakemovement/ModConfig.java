@@ -8,6 +8,8 @@ import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 @Config(name = "squake")
 public class ModConfig implements ConfigData {
 
+	private SpeedometerPosition speedometerPosition = SpeedometerPosition.BOTTOM_LEFT;
+
 	private float trimpMultiplier = 1.4f;
 
 	private float hardCapThreshold = 2f;
@@ -36,9 +38,21 @@ public class ModConfig implements ConfigData {
 
 	private boolean enabled = true;
 
+	public enum SpeedometerPosition {
+		TOP_LEFT,
+		TOP_RIGHT,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT,
+		OFF
+	}
+
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 		((ConfigManager)AutoConfig.getConfigHolder(ModConfig.class)).save();
+	}
+
+	public SpeedometerPosition getSpeedometerPosition() {
+		return speedometerPosition;
 	}
 
 	public float getTrimpMultiplier() {

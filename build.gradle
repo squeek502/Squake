@@ -30,6 +30,18 @@ repositories {
         name = "BuildCraft"
         url = "https://mod-buildcraft.com/maven"
     }
+	maven {
+        name = "Wrenchable"
+        url  "https://dl.bintray.com/zundrel/wrenchable"
+    }
+	maven {
+        name = "grondag"
+        url = "https://grondag-repo.appspot.com"
+        credentials {
+            username "guest"
+            password ""
+        }
+    }
 	//End Astromine
 	jcenter()
 	maven { url 'https://jitpack.io' }
@@ -48,7 +60,7 @@ dependencies {
 	include "me.shedaniel.cloth:config-2:${project.cloth_version}"
 
 	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-	modImplementation "com.github.Chainmail-Studios:Astromine:0c761914e58c0e5a8ff3925a8afffb3016041563"
+	modImplementation "com.github.Chainmail-Studios:Astromine:1.5.1"
 }
 
 processResources {

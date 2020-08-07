@@ -1,5 +1,5 @@
 {
-    "text.autoconfig.squake.title": "Squake Reloaded Options",
+    "text.autoconfig.squake.title": "Squake Options",
     "text.autoconfig.squake.option.trimpMultiplier": "Trimp Multiplier",
 	"text.autoconfig.squake.option.hardCapThreshold": "Hard Cap Threshold",
 	"text.autoconfig.squake.option.softCapThreshold": "Soft Cap Threshold",
@@ -15,9 +15,9 @@
 	"text.autoconfig.squake.option.maxAirAccelerationPerTick": "Max Air Acceleration Per Tick",
     "text.autoconfig.squake.option.enabled": "Enabled",
     
-    "fabric.mods.squake": "Squake Reloaded",
+    "fabric.mods.squake": "Squake",
     "fabric.mods.squake.enable": "Toggle Squake Movement",
 
-    "squake.key.toggle.enabled": "Squake Reloaded Movement: Enabled",
-    "squake.key.toggle.disabled": "Squake Reloaded Movement: Disabled"
+    "squake.key.toggle.enabled": "Squake Movement: Enabled",
+    "squake.key.toggle.disabled": "Squake Movement: Disabled"
 }
