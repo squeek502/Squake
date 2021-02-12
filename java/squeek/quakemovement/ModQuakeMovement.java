@@ -26,7 +26,6 @@ public class ModQuakeMovement implements ModInitializer {
 
 	public static void drawSpeedometer(MatrixStack matrixStack)
 	{
-		GlStateManager.pushMatrix();
 		MinecraftClient mc = MinecraftClient.getInstance();
 		PlayerEntity player = mc.player;
 		double deltaX = player.getX() - player.prevX;
