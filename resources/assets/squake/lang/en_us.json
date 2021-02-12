@@ -1,5 +1,6 @@
 {
     "text.autoconfig.squake.title": "Squake Options",
+	"text.autoconfig.squake.option.speedometerPosition": "Speedometer",
     "text.autoconfig.squake.option.trimpMultiplier": "Trimp Multiplier",
 	"text.autoconfig.squake.option.hardCapThreshold": "Hard Cap Threshold",
 	"text.autoconfig.squake.option.softCapThreshold": "Soft Cap Threshold",

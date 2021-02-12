@@ -1,9 +1,9 @@
 package squeek.quakemovement;
 
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
-import me.sargunvohra.mcmods.autoconfig1u.ConfigManager;
-import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.ConfigManager;
+import me.shedaniel.autoconfig.annotation.Config;
 
 @Config(name = "squake")
 public class ModConfig implements ConfigData {

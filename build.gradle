@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -16,36 +16,9 @@ sourceSets.main.resources.srcDirs += 'resources'
 repositories {
 	maven {
 		name = "ModMenu"
-		url = "https://maven.fabricmc.net/io/github/prospector/modmenu/"
+		url = "https://maven.terraformersmc.com/releases/"
 	}
-	//Begin Astromine
-	maven {
-        name = "Spinnery"
-        url = "https://dl.bintray.com/spinnery/Spinnery"
-    }
-	maven {
-        name = "Jared"
-        url = "https://maven.blamejared.com"
-    }
-	maven {
-        name = "BuildCraft"
-        url = "https://mod-buildcraft.com/maven"
-    }
-	maven {
-        name = "Wrenchable"
-        url  "https://dl.bintray.com/zundrel/wrenchable"
-    }
-	maven {
-        name = "grondag"
-        url = "https://grondag-repo.appspot.com"
-        credentials {
-            username "guest"
-            password ""
-        }
-    }
-	//End Astromine
-	jcenter()
-	maven { url 'https://jitpack.io' }
+	maven { url "https://maven.shedaniel.me/" }
 }
 
 dependencies {
@@ -53,15 +26,14 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:0.16.2+build.385-1.16.1"
-	modImplementation "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
-	include "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	modApi("me.shedaniel.cloth:cloth-config:${project.cloth_version}:fabric") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
-	modImplementation "me.shedaniel.cloth:config-2:${project.cloth_version}"  
-	include "me.shedaniel.cloth:config-2:${project.cloth_version}"
+	implementation("me.shedaniel.cloth:basic-math:0.5.1") // Cloth Config's Packaging is strange
 
-	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-	modImplementation "com.github.Chainmail-Studios:Astromine:1.5.1"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {

@@ -1,6 +1,5 @@
 package squeek.quakemovement;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -282,11 +281,7 @@ public class QuakeClientPlayer
 		else
 		{
 			// gravity
-			if (FabricLoader.getInstance().isModLoaded("astromine")) {
-				velocityY -= AstromineSupport.getGravity(player);
-			} else {
-				velocityY -= 0.08D;
-			}
+			velocityY -= 0.08D;
 		}
 
 		// air resistance
