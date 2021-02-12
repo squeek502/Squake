@@ -44,6 +44,7 @@ public class ModQuakeMovement implements ModInitializer {
 		} else {
 			y = mc.getWindow().getScaledHeight() - mc.textRenderer.fontHeight - 10;
 		}
+		GlStateManager.pushMatrix();
 		mc.textRenderer.drawWithShadow(matrixStack, speedString, x, y, 0xFFDDDDDD);
 		GlStateManager.popMatrix();
 	}
