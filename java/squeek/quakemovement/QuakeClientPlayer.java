@@ -267,6 +267,9 @@ public class QuakeClientPlayer
 		if (player.hasStatusEffect(StatusEffects.LEVITATION)) {
 			velocityY += (0.05D * (double)(player.getStatusEffect(StatusEffects.LEVITATION).getAmplifier() + 1) - /*vec3d6.y*/ velocityY) * 0.2D;
 			player.fallDistance = 0.0F;
+		} else if (player.hasStatusEffect(StatusEffects.SLOW_FALLING) && velocityY < 0) {
+			velocityY = -0.01D;
+            player.fallDistance = 0.0F;
 		} else if (player.world.isClient && !player.world.isChunkLoaded(pos))
 		{
 			if (player.getY() > 0.0D)
