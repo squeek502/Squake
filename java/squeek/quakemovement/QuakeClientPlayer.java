@@ -10,16 +10,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.commons.lang3.mutable.MutableBoolean;
 
 public class QuakeClientPlayer
 {
@@ -226,29 +228,22 @@ public class QuakeClientPlayer
 	}
 
 	private static boolean isInWater(Box box, World world) {
-		int i = MathHelper.floor(box.minX);
-      	int j = MathHelper.ceil(box.maxX);
-      	int k = MathHelper.floor(box.minY);
-      	int l = MathHelper.ceil(box.maxY);
-      	int m = MathHelper.floor(box.minZ);
-      	int n = MathHelper.ceil(box.maxZ);
-      	if (!world.isRegionLoaded(i, k, m, j, l, n)) {
-			return false;
-		}
-		BlockPos.Mutable mutable = new BlockPos.Mutable();
-		for(int p = i; p < j; ++p) {
-            for(int q = k; q < l; ++q) {
-               	for(int r = m; r < n; ++r) {
-                  	mutable.set(p, q, r);
-					FluidState fluidState = world.getFluidState(mutable);
-					if (fluidState.isIn(FluidTags.WATER)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		return BlockPos.stream(box).anyMatch(pos -> {
+			FluidState fluidState = world.getFluidState(pos);
+			return intersects(fluidState.getShape(world, pos), box);
+		});
 	}
+
+	public static boolean intersects(VoxelShape shape, Box box) {
+        if (shape.isEmpty()) return false;
+        MutableBoolean result = new MutableBoolean(false);
+        shape.forEachBox((minX, minY, minZ, maxX, maxY, maxZ) -> {
+            if (box.intersects(minX, minY, minZ, maxX, maxY, maxZ)) {
+                result.setTrue();
+            }
+        });
+        return result.booleanValue();
+    }
 
 	/* =================================================
 	 * END HELPERS
