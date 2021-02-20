@@ -405,8 +405,9 @@ public class QuakeClientPlayer
 					Box axisalignedbb = player.getBoundingBox().offset(player.getVelocity());
 					boolean isFallingIntoWater = isInWater(axisalignedbb, player.world);
 
-					if (isFallingIntoWater)
+					if (isFallingIntoWater) {
 						player.setVelocity(player.getVelocity().multiply(1.0D, ModQuakeMovement.CONFIG.getSharkingSurfaceTension(), 1.0D));
+					}
 				}
 			}
 
@@ -514,6 +515,11 @@ public class QuakeClientPlayer
 			player.move(MovementType.SELF, player.getVelocity());
 
 			player.setVelocity(player.getVelocity().x, 0, player.getVelocity().z);
+			Box axisalignedbb = player.getBoundingBox().offset(player.getVelocity());
+			BlockPos.stream(axisalignedbb).forEach(pos -> {
+				FluidState fluidState = player.world.getFluidState(pos);
+				player.setVelocity(player.getVelocity().add(fluidState.getVelocity(player.world, pos).multiply(0.002)));
+			});
 		}
 
 		// water jump
