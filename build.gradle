@@ -1,22 +1,39 @@
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'maven-publish'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = project.archives_base_name
+version = project.mod_version
 group = project.maven_group
 
 sourceSets.main.java.srcDirs += 'java'
 sourceSets.main.resources.srcDirs += 'resources'
 
+repositories {
+	maven {
+		name = "ModMenu"
+		url = "https://maven.terraformersmc.com/releases/"
+	}
+	maven { url "https://maven.shedaniel.me/" }
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	modApi("me.shedaniel.cloth:cloth-config:${project.cloth_version}:fabric") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+
+	implementation("me.shedaniel.cloth:basic-math:0.5.1") // Cloth Config's Packaging is strange
+
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {

@@ -1,22 +1,27 @@
 package squeek.quakemovement;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import squeek.quakemovement.ModConfig.SpeedometerPosition;
 
-public class ModQuakeMovement implements ModInitializer
-{
-	@Override
-	public void onInitialize()
-	{
+public class ModQuakeMovement implements ModInitializer {
+	public static final ModConfig CONFIG;
+
+	static {
+		AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
+		CONFIG = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 	}
 
-	public static float getFriction()
-	{
-		return 0.6f;
+	@Override
+	public void onInitialize() {
+		//Cause this class to be loaded so the config loads on startup
 	}
 
 	public static void drawSpeedometer(MatrixStack matrixStack)
@@ -27,6 +32,20 @@ public class ModQuakeMovement implements ModInitializer
 		double deltaZ = player.getZ() - player.prevZ;
 		double speed = MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 		String speedString = String.format("%.02f", speed);
-		mc.textRenderer.drawWithShadow(matrixStack, speedString, 10, mc.getWindow().getScaledHeight() - mc.textRenderer.fontHeight - 10, 0xFFDDDDDD);
+		int x;
+		int y;
+		if (CONFIG.getSpeedometerPosition() == SpeedometerPosition.BOTTOM_LEFT || CONFIG.getSpeedometerPosition() == SpeedometerPosition.TOP_LEFT) {
+			x = 10;
+		} else {
+			x = mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(speedString) - 10;
+		}
+		if (CONFIG.getSpeedometerPosition() == SpeedometerPosition.TOP_RIGHT || CONFIG.getSpeedometerPosition() == SpeedometerPosition.TOP_LEFT) {
+			y = 10;
+		} else {
+			y = mc.getWindow().getScaledHeight() - mc.textRenderer.fontHeight - 10;
+		}
+		GlStateManager.pushMatrix();
+		mc.textRenderer.drawWithShadow(matrixStack, speedString, x, y, 0xFFDDDDDD);
+		GlStateManager.popMatrix();
 	}
 }

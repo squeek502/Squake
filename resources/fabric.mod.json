@@ -6,7 +6,8 @@
   "name": "Squake",
   "description": "Quake-style movement (bunnyhopping, etc) in Minecraft",
   "authors": [
-    "squeek502"
+    "squeek502",
+    "ThatTrollzer/CoolMineman"
   ],
   "contact": {
     "sources": "https://github.com/squeek502/Squake"
@@ -22,6 +23,9 @@
     ],
     "client": [
       "squeek.quakemovement.KeyBindInitializer"
+    ],
+    "modmenu" : [
+      "squeek.quakemovement.ModMenuIntegration"
     ]
   },
   "mixins": [

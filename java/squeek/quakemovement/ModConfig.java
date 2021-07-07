@@ -1,61 +1,114 @@
 package squeek.quakemovement;
 
-public class ModConfig
-{
-	public static final String CATEGORY_MOVEMENT = "movement";
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.ConfigManager;
+import me.shedaniel.autoconfig.annotation.Config;
 
-	private static final double TRIMP_MULTIPLIER_DEFAULT = 1.4D;
-	public static float TRIMP_MULTIPLIER = (float)TRIMP_MULTIPLIER_DEFAULT;
-	private static final String TRIMP_MULTIPLIER_NAME = "trimpMultiplier";
+@Config(name = "squake")
+public class ModConfig implements ConfigData {
 
-	private static final double HARD_CAP_DEFAULT = 2.0D;
-	public static float HARD_CAP = (float)HARD_CAP_DEFAULT;
-	private static final String HARD_CAP_NAME = "hardCapThreshold";
+	private SpeedometerPosition speedometerPosition = SpeedometerPosition.BOTTOM_LEFT;
 
-	private static final double SOFT_CAP_DEFAULT = 1.4D;
-	public static float SOFT_CAP = (float)SOFT_CAP_DEFAULT;
-	private static final String SOFT_CAP_NAME = "softCapThreshold";
+	private float trimpMultiplier = 1.4f;
 
-	public static float SOFT_CAP_DEGEN;
-	private static final String SOFT_CAP_DEGEN_NAME = "softCapDegen";
-	private static final double SOFT_CAP_DEGEN_DEFAULT = 0.65D; // 0.65
+	private float hardCapThreshold = 2f;
 
-	private static final boolean SHARKING_ENABLED_DEFAULT = true;
-	public static boolean SHARKING_ENABLED = SHARKING_ENABLED_DEFAULT;
-	private static final String SHARKING_ENABLED_NAME = "sharkingEnabled";
+	private float softCapThreshold = 1.4f;
 
-	private static final double SHARKING_SURFACE_TENSION_DEFAULT = 0.2D;
-	public static double SHARKING_SURFACE_TENSION = SHARKING_SURFACE_TENSION_DEFAULT;
-	private static final String SHARKING_SURFACE_TENSION_NAME = "sharkingSurfaceTension";
+	private float softCapDegen = 0.65f;
 
-	private static final double SHARKING_WATER_FRICTION_DEFAULT = 0.1D;
-	public static double SHARKING_WATER_FRICTION = SHARKING_WATER_FRICTION_DEFAULT;
-	private static final String SHARKING_WATER_FRICTION_NAME = "sharkingWaterFriction";
+	private boolean sharkingEnabled = true;
 
-	private static final double ACCELERATE_DEFAULT = 10.0D;
-	public static double ACCELERATE = ACCELERATE_DEFAULT;
-	private static final String ACCELERATE_NAME = "groundAccelerate";
+	private double sharkingSurfaceTension = 0.2d;
 
-	private static final double AIR_ACCELERATE_DEFAULT = 14.0D;
-	public static double AIR_ACCELERATE = AIR_ACCELERATE_DEFAULT;
-	private static final String AIR_ACCELERATE_NAME = "airAccelerate";
+	private double sharkingWaterFriction = 0.99d;
 
-	private static final boolean UNCAPPED_BUNNYHOP_ENABLED_DEFAULT = true;
-	public static boolean UNCAPPED_BUNNYHOP_ENABLED = UNCAPPED_BUNNYHOP_ENABLED_DEFAULT;
-	private static final String UNCAPPED_BUNNYHOP_ENABLED_NAME = "uncappedBunnyhopEnabled";
+	private double groundAccelerate = 10d;
 
-	private static final boolean TRIMPING_ENABLED_DEFAULT = true;
-	public static boolean TRIMPING_ENABLED = TRIMPING_ENABLED_DEFAULT;
-	private static final String TRIMPING_ENABLED_NAME = "trimpEnabled";
+	private double airAccelerate = 14d;
 
-	private static final double INCREASED_FALL_DISTANCE_DEFAULT = 0.0D;
-	public static double INCREASED_FALL_DISTANCE = INCREASED_FALL_DISTANCE_DEFAULT;
-	private static final String INCREASED_FALL_DISTANCE_NAME = "fallDistanceThresholdIncrease";
+	private boolean uncappedBunnyhopEnabled = true;
 
-	private static final double MAX_AIR_ACCEL_PER_TICK_DEFAULT = 0.045D;
-	public static double MAX_AIR_ACCEL_PER_TICK = MAX_AIR_ACCEL_PER_TICK_DEFAULT;
-	private static final String MAX_AIR_ACCEL_PER_TICK_NAME = "maxAirAccelerationPerTick";
+	private boolean trimpEnabled = true;
 
-	private static final boolean ENABLED_DEFAULT = true;
-	public static boolean ENABLED = ENABLED_DEFAULT;
+	private double fallDistanceThresholdIncrease = 0.0d;
+
+	private double maxAirAccelerationPerTick = 0.045d;
+
+	private boolean enabled = true;
+
+	public enum SpeedometerPosition {
+		TOP_LEFT,
+		TOP_RIGHT,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT,
+		OFF
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+		((ConfigManager)AutoConfig.getConfigHolder(ModConfig.class)).save();
+	}
+
+	public SpeedometerPosition getSpeedometerPosition() {
+		return speedometerPosition;
+	}
+
+	public float getTrimpMultiplier() {
+		return this.trimpMultiplier;
+	}
+
+	public float getHardCapThreshold() {
+		return this.hardCapThreshold;
+	}
+
+	public float getSoftCapThreshold() {
+		return this.softCapThreshold;
+	}
+
+	public float getSoftCapDegen() {
+		return this.softCapDegen;
+	}
+
+	public boolean isSharkingEnabled() {
+		return this.sharkingEnabled;
+	}
+
+	public double getSharkingSurfaceTension() {
+		return this.sharkingSurfaceTension;
+	}
+
+	public double getSharkingWaterFriction() {
+		return this.sharkingWaterFriction;
+	}
+
+	public double getGroundAccelerate() {
+		return this.groundAccelerate;
+	}
+
+	public double getAirAccelerate() {
+		return this.airAccelerate;
+	}
+
+	public boolean isUncappedBunnyhopEnabled() {
+		return this.uncappedBunnyhopEnabled;
+	}
+
+	public boolean isTrimpEnabled() {
+		return this.trimpEnabled;
+	}
+
+	public double getFallDistanceThresholdIncrease() {
+		return this.fallDistanceThresholdIncrease;
+	}
+
+	public double getMaxAirAccelerationPerTick() {
+		return this.maxAirAccelerationPerTick;
+	}
+
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+
 }

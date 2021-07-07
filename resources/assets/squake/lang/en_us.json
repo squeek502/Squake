@@ -1,0 +1,24 @@
+{
+    "text.autoconfig.squake.title": "Squake Options",
+	"text.autoconfig.squake.option.speedometerPosition": "Speedometer",
+    "text.autoconfig.squake.option.trimpMultiplier": "Trimp Multiplier",
+	"text.autoconfig.squake.option.hardCapThreshold": "Hard Cap Threshold",
+	"text.autoconfig.squake.option.softCapThreshold": "Soft Cap Threshold",
+	"text.autoconfig.squake.option.softCapDegen": "Soft Cap Degeneration",
+	"text.autoconfig.squake.option.sharkingEnabled": "Sharking Enabled",
+	"text.autoconfig.squake.option.sharkingSurfaceTension": "Sharking Surface Tension",
+	"text.autoconfig.squake.option.sharkingWaterFriction": "Sharking Water Friction",
+	"text.autoconfig.squake.option.groundAccelerate": "Ground Accelerate",
+	"text.autoconfig.squake.option.airAccelerate": "Air Accelerate",
+	"text.autoconfig.squake.option.uncappedBunnyhopEnabled": "Uncapped Bunny Hop Enabled",
+	"text.autoconfig.squake.option.trimpEnabled": "Trimp Enabled",
+	"text.autoconfig.squake.option.fallDistanceThresholdIncrease": "Fall Distance Threshold Increase",
+	"text.autoconfig.squake.option.maxAirAccelerationPerTick": "Max Air Acceleration Per Tick",
+    "text.autoconfig.squake.option.enabled": "Enabled",
+    
+    "fabric.mods.squake": "Squake",
+    "fabric.mods.squake.enable": "Toggle Squake Movement",
+
+    "squake.key.toggle.enabled": "Squake Movement: Enabled",
+    "squake.key.toggle.disabled": "Squake Movement: Disabled"
+}
