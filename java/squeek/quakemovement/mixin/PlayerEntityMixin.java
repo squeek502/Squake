@@ -1,5 +1,6 @@
 package squeek.quakemovement.mixin;
 
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +15,7 @@ import squeek.quakemovement.QuakeServerPlayer;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin
 {
-	@Inject(at = @At("HEAD"), method = "travel(Lnet/minecraft/util/math/Vec3d;)V", cancellable = true)
+	@Inject(at = @At("HEAD"), method = "travel", cancellable = true)
 	private void travel(Vec3d movementInput, CallbackInfo info)
 	{
 		if (!ModConfig.ENABLED)
@@ -37,13 +38,13 @@ public abstract class PlayerEntityMixin
 	}
 
 	@Inject(at = @At("HEAD"), method = "handleFallDamage")
-	private void beforeFall(float fallDistance, float damageMultiplier, CallbackInfoReturnable<Boolean> info)
+	private void beforeFall(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir)
 	{
 		QuakeServerPlayer.beforeFall((PlayerEntity) (Object) this, fallDistance, damageMultiplier);
 	}
 
 	@Inject(at = @At("TAIL"), method = "handleFallDamage")
-	private void afterFall(float fallDistance, float damageMultiplier, CallbackInfoReturnable<Boolean> info)
+	private void afterFall(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir)
 	{
 		QuakeServerPlayer.afterFall((PlayerEntity) (Object) this, fallDistance, damageMultiplier);
 	}
