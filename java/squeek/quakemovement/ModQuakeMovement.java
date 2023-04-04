@@ -25,7 +25,7 @@ public class ModQuakeMovement implements ModInitializer
 		PlayerEntity player = mc.player;
 		double deltaX = player.getX() - player.prevX;
 		double deltaZ = player.getZ() - player.prevZ;
-		double speed = MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+		double speed = MathHelper.sqrt((float)(deltaX * deltaX + deltaZ * deltaZ));
 		String speedString = String.format("%.02f", speed);
 		mc.textRenderer.drawWithShadow(matrixStack, speedString, 10, mc.getWindow().getScaledHeight() - mc.textRenderer.fontHeight - 10, 0xFFDDDDDD);
 	}

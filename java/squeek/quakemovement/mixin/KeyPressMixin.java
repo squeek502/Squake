@@ -2,6 +2,7 @@ package squeek.quakemovement.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +22,7 @@ public class KeyPressMixin
 			ModConfig.ENABLED = !ModConfig.ENABLED;
 
 			String feedback = ModConfig.ENABLED ? I18n.translate("squake.key.toggle.enabled") : I18n.translate("squake.key.toggle.disabled");
-			MinecraftClient.getInstance().player.sendChatMessage("[" + ModInfo.MODID + "] " + feedback);
+			MinecraftClient.getInstance().player.sendMessage(Text.of("[" + ModInfo.MODID + "] " + feedback));
 		}
 	}
 }

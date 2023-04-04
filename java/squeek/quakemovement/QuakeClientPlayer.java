@@ -1,6 +1,5 @@
 package squeek.quakemovement;
 
-import com.sun.istack.internal.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -13,8 +12,8 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.tag.Tag;
+import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -43,7 +42,7 @@ public class QuakeClientPlayer
 		double d1 = player.getY();
 		double d2 = player.getZ();
 
-		if ((player.abilities.flying || player.isFallFlying()) && !player.hasVehicle())
+		if ((player.getAbilities().flying || player.isFallFlying()) && !player.hasVehicle())
 			return false;
 		else
 			didQuakeMovement = quake_travel(player, movementInput);
@@ -76,7 +75,7 @@ public class QuakeClientPlayer
 
 	public static boolean isInWater(PlayerEntity player) {
 		FluidState fluidState = player.world.getFluidState(player.getBlockPos());
-		return player.isTouchingWater() && player.method_29920() && !player.canWalkOnFluid(fluidState.getFluid());
+		return player.isTouchingWater() && player.shouldSwimInFluids() && !player.canWalkOnFluid(fluidState);
 	}
 
 	public static boolean updateVelocityPlayer(PlayerEntity player, Vec3d movementInput, float movementSpeed)
@@ -87,7 +86,7 @@ public class QuakeClientPlayer
 		if (!ModConfig.ENABLED)
 			return false;
 
-		if ((player.abilities.flying && !player.hasVehicle()) || isInWater(player) || player.isInLava() || !player.abilities.flying)
+		if ((player.getAbilities().flying && !player.hasVehicle()) || isInWater(player) || player.isInLava() || !player.getAbilities().flying)
 		{
 			return false;
 		}
@@ -113,7 +112,7 @@ public class QuakeClientPlayer
 		// undo this dumb thing
 		if (player.isSprinting())
 		{
-			float f = player.yaw * 0.017453292F;
+			float f = player.getYaw() * 0.017453292F;
 			Vec3d deltaVelocity = new Vec3d(MathHelper.sin(f) * 0.2F, 0, -(MathHelper.cos(f) * 0.2F));
 			player.setVelocity(player.getVelocity().add(deltaVelocity));
 		}
@@ -129,14 +128,14 @@ public class QuakeClientPlayer
 	private static double getSpeed(PlayerEntity player)
 	{
 		Vec3d velocity = player.getVelocity();
-		return MathHelper.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+		return MathHelper.sqrt((float) (velocity.x * velocity.x + velocity.z * velocity.z));
 	}
 
 	/// Assumes the player is on the ground
 	private static Block getGroundBlock(PlayerEntity player)
 	{
 		// copied from Entity.getVelocityAffectingPos
-		BlockPos groundPos = new BlockPos(player.getX(), player.getBoundingBox().minY - 0.5000001D, player.getZ());
+		BlockPos groundPos = new BlockPos((int) player.getX(), (int) (player.getBoundingBox().minY - 0.5000001D), (int) player.getZ());
 		return player.world.getBlockState(groundPos).getBlock();
 	}
 
@@ -178,7 +177,7 @@ public class QuakeClientPlayer
 
 		if (f3 >= 1.0E-4F)
 		{
-			f3 = MathHelper.sqrt(f3);
+			f3 = MathHelper.sqrt((float) f3);
 
 			if (f3 < 1.0F)
 			{
@@ -188,8 +187,8 @@ public class QuakeClientPlayer
 			f3 = 1.0F / f3;
 			sidemove *= f3;
 			forwardmove *= f3;
-			double f4 = MathHelper.sin(player.yaw * (float) Math.PI / 180.0F);
-			double f5 = MathHelper.cos(player.yaw * (float) Math.PI / 180.0F);
+			double f4 = MathHelper.sin(player.getYaw() * (float) Math.PI / 180.0F);
+			double f5 = MathHelper.cos(player.getYaw() * (float) Math.PI / 180.0F);
 			dir[0] = (sidemove * f5 - forwardmove * f4);
 			dir[1] = (forwardmove * f5 + sidemove * f4);
 		}
@@ -287,7 +286,7 @@ public class QuakeClientPlayer
 	private static void minecraft_SwingLimbsBasedOnMovement(PlayerEntity player)
 	{
 		// this got extracted out in the Minecraft code, so just use that
-		player.method_29242(player, false);
+		player.updateLimbs(false);
 	}
 
 	private static void minecraft_WaterMove(PlayerEntity player, Vec3d movementInput)
@@ -361,7 +360,7 @@ public class QuakeClientPlayer
 			return false;
 		}
 		// take care of lava movement using default code
-		else if ((player.isInLava() && !player.abilities.flying))
+		else if ((player.isInLava() && !player.getAbilities().flying))
 		{
 			return false;
 		}
@@ -446,7 +445,7 @@ public class QuakeClientPlayer
 	}
 
 	// copied from WorldView.containsFluid but with the ability to specify the fluid
-	static private boolean containsFluid(WorldView world, Box box, Tag<Fluid> tag) {
+	static private boolean containsFluid(WorldView world, Box box, TagKey<Fluid> tag) {
 		int i = MathHelper.floor(box.minX);
 		int j = MathHelper.ceil(box.maxX);
 		int k = MathHelper.floor(box.minY);
@@ -563,7 +562,7 @@ public class QuakeClientPlayer
 		// get all relevant movement values
 		float wishspeed = (sidemove != 0.0F || forwardmove != 0.0F) ? quake_getMaxMoveSpeed(player) : 0.0F;
 		double[] wishdir = getMovementDirection(player, sidemove, forwardmove);
-		boolean isOffsetInLiquid = player.world.getBlockState(new BlockPos(player.getX(), player.getY() + 1.0D, player.getZ())).getFluidState().isEmpty();
+		boolean isOffsetInLiquid = player.world.getBlockState(new BlockPos((int) player.getX(), (int) (player.getY() + 1.0D), (int) player.getZ())).getFluidState().isEmpty();
 		boolean isSharking = isJumping(player) && isOffsetInLiquid;
 		double curspeed = getSpeed(player);
 
