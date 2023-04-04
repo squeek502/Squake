@@ -12,9 +12,8 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.tag.Tag;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -136,7 +135,7 @@ public class QuakeClientPlayer
 	private static Block getGroundBlock(PlayerEntity player)
 	{
 		// copied from Entity.getVelocityAffectingPos
-		BlockPos groundPos = new BlockPos(player.getX(), player.getBoundingBox().minY - 0.5000001D, player.getZ());
+		BlockPos groundPos = new BlockPos((int) player.getX(), (int) (player.getBoundingBox().minY - 0.5000001D), (int) player.getZ());
 		return player.world.getBlockState(groundPos).getBlock();
 	}
 
@@ -287,7 +286,7 @@ public class QuakeClientPlayer
 	private static void minecraft_SwingLimbsBasedOnMovement(PlayerEntity player)
 	{
 		// this got extracted out in the Minecraft code, so just use that
-		player.updateLimbs(player, false);
+		player.updateLimbs(false);
 	}
 
 	private static void minecraft_WaterMove(PlayerEntity player, Vec3d movementInput)
@@ -563,7 +562,7 @@ public class QuakeClientPlayer
 		// get all relevant movement values
 		float wishspeed = (sidemove != 0.0F || forwardmove != 0.0F) ? quake_getMaxMoveSpeed(player) : 0.0F;
 		double[] wishdir = getMovementDirection(player, sidemove, forwardmove);
-		boolean isOffsetInLiquid = player.world.getBlockState(new BlockPos(player.getX(), player.getY() + 1.0D, player.getZ())).getFluidState().isEmpty();
+		boolean isOffsetInLiquid = player.world.getBlockState(new BlockPos((int) player.getX(), (int) (player.getY() + 1.0D), (int) player.getZ())).getFluidState().isEmpty();
 		boolean isSharking = isJumping(player) && isOffsetInLiquid;
 		double curspeed = getSpeed(player);
 
